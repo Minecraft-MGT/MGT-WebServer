@@ -1,0 +1,78 @@
+{% extends "_baseLayout.html" %}
+{% block content %}
+<style>    
+    .login-form {
+        width: 340px;
+        margin: 50px auto;
+        font-size: 15px;
+    }
+    .login-form .frm {
+        margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .btn {        
+        font-size: 15px;
+        font-weight: bold;
+    }
+</style>
+
+
+<div class="login-wrapper">
+    <div class="login-form">
+        <div class="frm">
+            <h2 class="text-center">Login</h2>       
+            <div class="form-group">
+                <input id="inp_username" type="text" class="form-control formsupply" placeholder="Username" required="required">
+            </div>
+            <div class="form-group">
+                <input id="inp_password" type="password" class="form-control formsupply" placeholder="Passwort" required="required">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block" disabled id="submitter" onclick="fakeSubmit();">Einloggen</button>
+            </div>
+            <div class="clearfix">
+                <!--<label class="float-left form-check-label"><input type="checkbox" disabled> seik</label>-->
+                <a onclick="alert('Bitte einen Admin kontaktieren!');" href="#" class="float-right">Forgot Password?</a>
+            </div>        
+        </div>
+        <p class="text-center"><a href="/register">Einen Account erstellen?</a></p>
+    </div>
+</div>
+
+<script>
+    function checkSubmitRequirements(){
+        let success = true;
+        $(".login-form").find(':input').get().forEach((ce)=>{
+            if(ce.value == "" && ce.getAttribute("required")) success = false;
+        })
+        if(success)
+            $("#submitter").removeAttr("disabled");
+        else
+            $("#submitter").attr("disabled", "disabled");
+    }
+    for(let ie of $("input")){
+        ie.addEventListener("keyup", checkSubmitRequirements);
+    }
+
+    async function fakeSubmit(){
+        if(!$("#submitter").attr("disabled")){
+            let un = $("#inp_username").val();
+            let pw = $("#inp_password").val();
+            if(await acc_login(un, pw)["ok"]){
+                alert("sucker")
+            }
+
+        }
+    }
+</script>
+
+{% endblock %}

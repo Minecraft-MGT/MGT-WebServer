@@ -1,0 +1,78 @@
+{% extends "_baseLayout.html" %}
+{% block content %}
+<style>    
+    .login-form {
+        width: 340px;
+        margin: 50px auto;
+        font-size: 15px;
+    }
+    .login-form .frm {
+        margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .btn {        
+        font-size: 15px;
+        font-weight: bold;
+    }
+</style>
+
+
+<div class="login-wrapper">
+    <div class="login-form">
+        <div class="frm">
+            <h2 class="text-center">Registrierung</h2>       
+            <div class="form-group">
+                <input id="inp_username" type="text" class="form-control formsupply" placeholder="Username" required="required">
+            </div>
+            <div class="form-group">
+                <input id="inp_password" type="password" class="form-control formsupply" placeholder="Passwort" required="required">
+            </div>
+            <div class="form-group">
+                <input id="inp_password_rep" type="password" class="form-control formsupply" placeholder="Passwort wiederholen" required="required">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block" disabled id="submitter" onclick="fakeSubmit();">Registrieren</button>
+            </div>     
+        </div>
+        <p class="text-center"><a href="/login">Du hast schon einen Account?</a></p>
+    </div>
+</div>
+
+<script>
+
+    function checkSubmitRequirements(){
+        let success = true;
+        $(".login-form").find(':input').get().forEach((ce)=>{
+            if(ce.value == "" && ce.getAttribute("required")) success = false;
+        })
+        if(success)
+            $("#submitter").removeAttr("disabled");
+        else
+            $("#submitter").attr("disabled", "disabled");
+    }
+    for(let ie of $("input")){
+        ie.addEventListener("keyup", checkSubmitRequirements);
+    }
+
+    async function fakeSubmit(){
+        if(!$("#submitter").attr("disabled")){
+            if($("#inp_password").val() !== $("#inp_password_rep").val()) return alert("password repetition unidentical...");
+            let un = $("#inp_username").val();
+            let pw = $("#inp_password").val();
+            if((await acc_register(un, pw))["ok"]){
+                await acc_login(un, pw);
+            }
+        }
+    }
+</script>
+
+{% endblock %}

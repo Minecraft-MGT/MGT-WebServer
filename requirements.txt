@@ -1,0 +1,6 @@
+pyyaml
+Flask
+gunicorn
+pymongo
+pymongo[srv]
+mongoengine
