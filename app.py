@@ -20,44 +20,16 @@ else:
 
 
 # Connect to database
-DBM.load(f"mongodb+srv://{SETTINGS['mongodb']['username']}:{SETTINGS['mongodb']['password']}@{SETTINGS['mongodb']['path']}")
+#DBM.load(f"mongodb+srv://{SETTINGS['mongodb']['username']}:{SETTINGS['mongodb']['password']}@{SETTINGS['mongodb']['path']}")
+
+def render_mesage(text, error=False):
+    return render_template("customMessage.html", PY_MSG=text, PY_ERROR=error)
 
 def request_user():
     if not "authtoken" in request.cookies: return None
     return DBM.Session.objects.get(id=request.cookies["authtoken"]).owner
 
 
-#server side ticker (runs every 30 sec)
-def server_ticker():
-    lastdate = ""#datetime.today().strftime('%Y-%m-%d')
-    while True:
-        ctime = DBM.current_time()
-        ctime_min = DBM.timeToDayMin(DBM.current_time())
-        for ct in DBM.Task.objects():
-            if ct.time_end() is not None:
-                if ct.is_planned() and ct.time_end()<ctime_min and not ct.is_finished() and not ct.is_repeating():
-                    ct.finish()
-                    print(f"finished {ct.title}")
-        
-        cdate = datetime.today().strftime('%Y-%m-%d')
-        if not cdate == lastdate:
-            print(f"Datechange [{cdate}]")
-            lastdate = cdate
-            #automatically sort in tasks that are marked for that day
-            for ct in DBM.Task.objects():
-                if ct.ts_date == cdate or ct.ts_weekday == (date.today()+timedelta(days=1)).weekday():  #if task was planned for today
-                    if ct.ts_time == "": #no startTime selected jet
-                        for cowner in ct.owners:
-                            success = ct.auto_sortin_perform(cowner)
-                            print(f"autosortin(caused by dateChange) {ct.title} from {cowner} --> {success}")
-        time.sleep(30)
-
-t_mintick = Thread(target=server_ticker)
-t_mintick.daemon = True
-t_mintick.start()
-
-
-#load flask server
 
 app = Flask(__name__)
 
@@ -65,26 +37,13 @@ app = Flask(__name__)
 def ep_index():
     return render_template("start.html")
 
+@app.route("/user/team")
+def ep_team():
+    return render_mesage("Hier gibts noch nichts!")
 
-#tasking
-@app.route("/user/toDay")
-def ep_user_toDay():
-    return render_template("toDay.html")
-
-@app.route("/user/taskList")
-def ep_user_taskList():
-    return render_template("taskList.html")
-
-@app.route("/user/taskView")
-def ep_user_taskView():
-    return render_template("taskView.html")
-
-
-
-
-@app.route("/user/account")
-def ep_user_accout():
-    return render_template("accountManager.html")
+@app.route("/user/acc")
+def ep_account():
+    return render_mesage("Hier gibts noch nichts... :D")
 
 @app.route("/login")
 def ep_login():
@@ -96,7 +55,7 @@ def ep_register():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return f"{request.path} not found :C"
+    return render_mesage(f"Zu deiner Anfrage mit dem Pfad \"{request.path}\" konntent wir leider keine Ergebnisse finden!", error=True)
 
 @app.before_request
 def catcher():

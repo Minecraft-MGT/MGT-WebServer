@@ -107,28 +107,6 @@ converter = {
     }
 }
 
-function task_active(taskdata){
-    if(!taskdata["planned"]) return false;
-    let taskStart = converter.timeToDayMin(taskdata["timeState"]["time"]);
-    let taskEnd = converter.timeToDayMin(taskdata["timeState"]["time"])+converter.timeToDayMin(taskdata["duration"]);
-    let currentTime = converter.timeToDayMin(getCurrentTime());
-    return (currentTime>taskStart && currentTime<taskEnd)
-}
-
-
-async function TASKAPI(taskID, method){
-    return (await apiRequest({
-        "cmd": "tasking",
-        "args": {"method": method, "taskID": taskID}
-    }));
-}
-
-async function TASKAPICALL(taskID, method){
-    response = await TASKAPI(taskID, method);
-    if(!response["ok"]) alert("Error: Operation could not be performed!");
-    return response["ok"];
-}
-
 // send all Errors as debug to the server
 var foundErrors = []
 window.addEventListener("error", async function (e) {
@@ -140,3 +118,6 @@ window.addEventListener("error", async function (e) {
     return false;
  })
 
+ function randint(max) {
+    return Math.floor(Math.random() * max);
+  }
