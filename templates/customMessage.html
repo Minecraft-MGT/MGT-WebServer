@@ -1,0 +1,63 @@
+{% extends "_baseLayout.html" %}
+{% block content %}
+<style>
+    #section-content{
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+</style>
+
+<div id="info-msgdiv">
+    {% if PY_ERROR == True %}
+        <h1>Alaaaarm!</h1>
+    {% else %}
+        <h1>Info:</h1>
+    {% endif %}
+    <p>{{PY_MSG}}</p>
+</div>
+
+{% if PY_ERROR == True %}
+<button class="btn btn-danger" onclick="alert('Nope!');">HILFE</button>
+<script>
+    let startDelaySec = 1;//10
+    let deyayMillis = 1;//20
+    let tickcount = 0;
+
+    setTimeout(()=>{
+        let curseIID = setInterval(()=>{
+            
+            if(document.body.innerHTML.split("").length<=10){
+                clearInterval(curseIID);
+                document.body.innerHTML += '<button class="btn btn-success" onclick="document.location=\"/\";">Penis!</button>';
+                console.log("finished!")
+            }
+            if(randint(3)==0){
+                console.log((tickcount++)+" => "+document.body.innerHTML.split("").length);
+                let cih = document.body.innerHTML;
+                let index = randint(cih.split("").length-1);
+                cih = cih.slice(0, index) + cih.slice(index+1);
+                document.body.innerHTML = cih;
+            }else if(randint(15)==0 && tickcount>=500){
+                let fcs = ["blur(10px)", "invert()", "", ""];
+                let fc = fcs[randint(fcs.length)];
+                document.body.style.filter = fc;
+            }else if(randint(150)==0 && tickcount>=750  && tickcount<=1250){
+                if(randint(100)==0){
+                    let cih = document.body.innerHTML;
+                    let index = randint(cih.split("").length-1);
+                    cih = cih.slice(0, index) +'NAWJDKJAWND'+ cih.slice(index+1);
+                    document.body.innerHTML = cih;
+                }
+            }else if(randint(50)==0  && tickcount>=1000){
+                document.body.style.backgroundColor = "rgb("+randint(255)+","+randint(255)+","+randint(255)+")";
+            }else if(randint(75)==0 && tickcount>=1000){
+                document.body.style.color = "rgb("+randint(255)+","+randint(255)+","+randint(255)+")";
+            }else if(randint(150)==0 && tickcount>=1500){
+                document.body.style.padding = randint(500)+"px";
+            }
+        }, deyayMillis);
+    }, startDelaySec*1000)
+</script>
+{% endif %}
+
+{% endblock %}
