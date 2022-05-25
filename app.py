@@ -95,90 +95,12 @@ def ep_api():
     try:
         cmd:str = rqd["cmd"]
         args:dict = rqd["args"]
-
-        if cmd == "tasking":
-            taskid = args["taskID"]
-            if taskid == "" and args["method"] == "setdata":     #create new task
-                taskid = DBM.Task(title="No Title :(", content="", owners=[request_user()]).save().id
-
-            task = DBM.Task.objects.get(id=taskid)
-            if request_user() in task.owners:   #requestor has access to task
-                method = args["method"]
-                
-                if method == "getspecdata":
-                    response["values"] = {}
-                    for name in args["fields"]:
-                        response["values"][name] = task[name] if name in task else None
-                    ok = True
-                
-                if method == "getdata":
-                    response["data"] = task.data_representation()
-                    ok = True
-                
-                if method == "setdata":
-                    for k, v in args["values"].items():
-                        task[k] = v
-                    ok = True
-
-                if method == "delete":
-                    task.delete()
-                    ok = True
-
-                if method == "sortin":
-                    ok, response["msg"] = task.auto_sortin_perform(request_user())
-                
-                if method == "throwOut":
-                    task.day_throwout()
-                    ok = True
-                
-                if method == "finish":
-                    task.finish()
-                    ok = True
-
-                if method == "unfinish":
-                    task.unfinish()
-                    ok = True
-                
-                task.save()
-            else:
-                task["msg"] = "access denied"
         
-        if cmd == "autofillup":
-            for ct in request_user().get_tasks_sorted():
-                ct.auto_sortin_perform(request_user())
-            ok = True
-
-        if cmd == "tasklist":
-            if "fin" in args["spec"]:
-                result = DBM.Task.objects(Q(owners=request_user()) & Q(finishtime__ne=-1))
-            else:
-                result = DBM.Task.objects(Q(owners=request_user()) & Q(finishtime=-1))
-            def sorter(x):
-                return -x.priority()
-            result = sorted(result, key=sorter)
-            response["list"] = []
-            for csi in result:
-                response["list"].append(csi.data_representation())
-            ok = True
-        
-        if cmd == "task_today":
-            #result = DBM.Task.objects(Q(owners=request_user()) |Q(ts_date=str(date.today())) | Q(ts_weekday=(date.today()+timedelta(days=1)).weekday()))
-            result = request_user().currentday_tasks()
-            response["list"] = []
-            for entry in result:
-                response["list"].append(entry.data_representation())
-            ok = True
-
-        if cmd == "session_username":
-            token = args["token"]
-            if DBM.Session.objects(id=token):
-                response["name"] = DBM.Session.objects.get(id=token).owner.username
-                ok = True
-
 
         if cmd == "user_login":
             if DBM.acc_check_access(args["username"], args["password"]):
                 response ["authsync"] = str(DBM.session_create(DBM.Account.objects(username=args["username"])[0]))
+                response ["usernamesync"] = str(DBM.session_create(DBM.Account.objects(username=args["username"])[0]))
                 ok = True
 
         if cmd == "user_register":
@@ -203,6 +125,7 @@ def ep_api():
             response["msg"] = "pong"
             response["mirror"] = args["mirror"]
             ok = True
+
     except KeyError as e:
         ok = False
         return "missing argument ("+str(e)+")", 400
