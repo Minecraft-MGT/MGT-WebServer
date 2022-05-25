@@ -20,7 +20,7 @@ else:
 
 
 # Connect to database
-#DBM.load(f"mongodb+srv://{SETTINGS['mongodb']['username']}:{SETTINGS['mongodb']['password']}@{SETTINGS['mongodb']['path']}")
+DBM.load(f"mongodb+srv://{SETTINGS['mongodb']['username']}:{SETTINGS['mongodb']['password']}@{SETTINGS['mongodb']['path']}")
 
 def render_mesage(text, error=False):
     return render_template("customMessage.html", PY_MSG=text, PY_ERROR=error)
