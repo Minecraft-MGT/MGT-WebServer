@@ -20,7 +20,7 @@ else:
 
 
 # Connect to database
-DBM.load(f"mongodb+srv://{SETTINGS['mongodb']['username']}:{SETTINGS['mongodb']['password']}@{SETTINGS['mongodb']['path']}")
+DBM.load(f"{SETTINGS['mongodb']['method']}://{SETTINGS['mongodb']['username']}:{SETTINGS['mongodb']['password']}@{SETTINGS['mongodb']['path']}")
 
 def render_mesage(text, error=False):
     return render_template("customMessage.html", PY_MSG=text, PY_ERROR=error)
@@ -100,7 +100,7 @@ def ep_api():
         if cmd == "user_login":
             if DBM.acc_check_access(args["username"], args["password"]):
                 response ["authsync"] = str(DBM.session_create(DBM.Account.objects(username=args["username"])[0]))
-                response ["usernamesync"] = str(DBM.session_create(DBM.Account.objects(username=args["username"])[0]))
+                response ["usernamesync"] = str(args["username"])
                 ok = True
 
         if cmd == "user_register":

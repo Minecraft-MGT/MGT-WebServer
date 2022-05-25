@@ -18,7 +18,7 @@ window.addEventListener("load", ()=>{
 async function navbarUpdate(){
     //build clientinfo
     if(auth.loggedIn()){//when logged in
-        $("#navbar-acctile").html(currentUsername());
+        $("#navbar-acctile").html(auth.currentUsername());
         $("#navbar-acctile").attr("href", "/user/acc");
     }else 
         for(ce of $(".requirelogin").get()){
@@ -49,7 +49,9 @@ var acc = {
         let response = await apiRequest(payload);
         if(response["ok"]){
             auth.saveAuthToken(response["authsync"]);
-            document.location.pathname = "/user/account";
+            auth.setUsername(response["usernamesync"]);
+
+            document.location.pathname = "/user/acc";
         }else{
             alert("login failed...")
         }
