@@ -31,7 +31,7 @@
         <div class="frm">
             <h2 class="text-center">Registrierung</h2>       
             <div class="form-group">
-                <input id="inp_username" type="text" class="form-control formsupply" placeholder="Username" required="required">
+                <input id="inp_username" type="text" class="form-control formsupply" placeholder="Minecraft Username" required="required">
             </div>
             <div class="form-group">
                 <input id="inp_password" type="password" class="form-control formsupply" placeholder="Passwort" required="required">
@@ -68,11 +68,14 @@
             if($("#inp_password").val() !== $("#inp_password_rep").val()) return alert("password repetition unidentical...");
             let un = $("#inp_username").val();
             let pw = $("#inp_password").val();
-            if((await acc_register(un, pw))["ok"]){
-                await acc_login(un, pw);
+            if((await acc.register(un, pw))["ok"]){
+                await acc.login(un, pw);
             }
         }
     }
+
 </script>
+
+
 
 {% endblock %}

@@ -59,6 +59,7 @@
         else
             $("#submitter").attr("disabled", "disabled");
     }
+    
     for(let ie of $("input")){
         ie.addEventListener("keyup", checkSubmitRequirements);
     }
@@ -67,10 +68,9 @@
         if(!$("#submitter").attr("disabled")){
             let un = $("#inp_username").val();
             let pw = $("#inp_password").val();
-            if(await acc_login(un, pw)["ok"]){
-                alert("sucker")
+            if(await acc.login(un, pw)["ok"]){
+                alert("abcdefghijklmnopqrstuvwxyz")
             }
-
         }
     }
 </script>
