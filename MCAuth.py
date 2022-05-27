@@ -3,7 +3,7 @@ import string, random
 def random_string(size=6, chars=string.ascii_uppercase+string.digits+string.ascii_lowercase):
     return ''.join(random.choice(chars) for _ in range(int(size)))
 
-tokens = {"LeeDo": "meemesheesh"}
+tokens = {"LeeDo": "kecko"}
 providers = []
 
 def token_by_name(name):
@@ -17,6 +17,23 @@ def create_token_for(name):
 
 def provider_register(address):
     providers.append(address)
+    build_authserver_string()
 
 def provider_deregister(address):
-    providers.remove(address)
+    while address in providers:
+        providers.remove(address)
+    build_authserver_string()
+
+authserver_string = ""
+
+def build_authserver_string():
+    global authserver_string
+    authserver_string = ""
+    authserver_string = (", ".join(providers))
+    authserver_string = " oder".join(authserver_string.rsplit(",", 1))
+    print("authss: "+authserver_string)
+
+def get_authserver_string():
+    return authserver_string
+
+build_authserver_string()

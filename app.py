@@ -34,6 +34,11 @@ def request_user():
 
 app = Flask(__name__)
 
+@app.route("/test")
+def ep_test():
+    print("gass: "+MCA.get_authserver_string())
+    return render_template("loginAuth.html", PY_AUTHSERVERS=MCA.get_authserver_string(), PY_ACCNAME="TestFred")
+
 @app.route("/")
 def ep_index():
     return render_template("start.html")
@@ -135,8 +140,8 @@ def ep_api():
             if args["authenticationToken"] == "3OfbKnsQgQEXzcJGu8cuIGgHN9Ftg3bfu8IWr32P6JTe7Ffl0W":
                 method = args["method"]
 
-                if method == "register": MCA.provider_register(request.remote_addr)
-                if method == "deregister": MCA.provider_deregister(request.remote_addr)
+                if method == "register": MCA.provider_register(args["address"])
+                if method == "deregister": MCA.provider_deregister(args["address"])
 
                 if method == "get_token": response["token"] = MCA.token_by_name(args["playername"])
                 
