@@ -137,7 +137,7 @@ def ep_api():
 
 
         if cmd == "MCAUTHENTICATION":
-            if args["authenticationToken"] == "3OfbKnsQgQEXzcJGu8cuIGgHN9Ftg3bfu8IWr32P6JTe7Ffl0W":
+            if args["authenticationToken"] == SETTINGS["mcauth"]["accesstoken"]:
                 method = args["method"]
 
                 if method == "register": MCA.provider_register(args["address"])
