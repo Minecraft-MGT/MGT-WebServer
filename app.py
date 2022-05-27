@@ -6,6 +6,7 @@ from datetime import date, timedelta, datetime
 from mongoengine.queryset.visitor import Q
 from threading import Thread
 import DBM
+import MCAuth as MCA
 
 # Load settings
 SETTINGS = {}
@@ -128,6 +129,19 @@ def ep_api():
             response["msg"] = "pong"
             response["mirror"] = args["mirror"]
             ok = True
+
+
+        if cmd == "MCAUTHENTICATION":
+            if args["authenticationToken"] == "3OfbKnsQgQEXzcJGu8cuIGgHN9Ftg3bfu8IWr32P6JTe7Ffl0W":
+                method = args["method"]
+
+                if method == "register": MCA.provider_register(request.remote_addr)
+                if method == "deregister": MCA.provider_deregister(request.remote_addr)
+
+                if method == "get_token": response["token"] = MCA.token_by_name(args["playername"])
+                
+                ok = True
+                print("Providers: "+str(MCA.providers))
 
     except KeyError as e:
         ok = False
