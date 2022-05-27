@@ -57,6 +57,20 @@ var acc = {
         }
         navbarUpdate();
         return response;
+    },
+    "terminateSession": async function (){
+        let payload = {
+            "cmd": "session_terminate",
+            "args": {}
+        }
+        let response = await apiRequest(payload);
+        if(response["ok"]){
+            auth.resetSession();
+            document.location.reload();
+        }else{
+            alert("logout failed...")
+        }
+        navbarUpdate();        
     }
 }
 

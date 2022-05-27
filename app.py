@@ -96,6 +96,9 @@ def ep_api():
         cmd:str = rqd["cmd"]
         args:dict = rqd["args"]
         
+        if cmd == "session_terminate":
+            DBM.session_terminate(request.cookies["authtoken"])
+            ok = True
 
         if cmd == "user_login":
             if DBM.acc_check_access(args["username"], args["password"]):
@@ -142,4 +145,4 @@ def ep_api():
 
 #start flask debug server
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=25565, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=31313, debug=True, threaded=True)
