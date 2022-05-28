@@ -8,7 +8,6 @@ function getCurrentTime(){
 }
 
 
-
 //js executed on page load
 window.addEventListener("load", ()=>{
     auth.loadAuthToken();
@@ -32,13 +31,21 @@ async function navbarUpdate(){
 //account/session controll
 
 var acc = {
-    "register": async function(username, password){
+    "preregister": async function(username, password){
         let payload = {
-            "cmd": "user_register",
+            "cmd": "user_preregister",
             "args": {"username": username, "password": password}
         }
         let response = await apiRequest(payload);
-        alert(response["msg"]);
+        if(!response["ok"]) alert(response["msg"]);
+        return response;
+    },
+    "register": async function(username, password, authtoken){
+        let payload = {
+            "cmd": "user_register",
+            "args": {"username": username, "password": password, "authtoken": authtoken}
+        }
+        let response = await apiRequest(payload);
         return response;
     },
     "login": async function (username, password){
@@ -53,7 +60,7 @@ var acc = {
 
             document.location.pathname = "/user/acc";
         }else{
-            alert("login failed...")
+            alert("Login fehlgeschlagen.")
         }
         navbarUpdate();
         return response;

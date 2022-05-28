@@ -68,8 +68,14 @@
             if($("#inp_password").val() !== $("#inp_password_rep").val()) return alert("password repetition unidentical...");
             let un = $("#inp_username").val();
             let pw = $("#inp_password").val();
-            if((await acc.register(un, pw))["ok"]){
-                await acc.login(un, pw);
+            if((await acc.preregister(un, pw))["ok"]){
+                let form = $('<form action="' + "/auth" + '" method="post" style="display: none;">' +
+                    '<input type="text" name="username" value="'+un+'" />' +
+                    '<input type="text" name="password" value="'+pw+'" />' +
+                    '</form>');
+                $('body').append(form);
+                form.submit();
+                //document.location = "/auth?u="+un+"&p="+pw;
             }
         }
     }

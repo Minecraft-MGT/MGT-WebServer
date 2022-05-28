@@ -1,4 +1,4 @@
-import os, yaml, time
+import os, yaml, time, requests
 import traceback
 from flask import Flask, render_template, redirect, Markup, request, jsonify, escape, session
 import json
@@ -34,10 +34,11 @@ def request_user():
 
 app = Flask(__name__)
 
-@app.route("/test")
+@app.route("/auth", methods=["POST"])
 def ep_test():
-    print("gass: "+MCA.get_authserver_string())
-    return render_template("loginAuth.html", PY_AUTHSERVERS=MCA.get_authserver_string(), PY_ACCNAME="TestFred")
+    username = request.form["username"]
+    password = request.form["password"]
+    return render_template("auth.html", PY_AUTHSERVERS=MCA.get_authserver_string(), PY_ACCNAME=username, PY_PW=password)
 
 @app.route("/")
 def ep_index():
@@ -114,11 +115,25 @@ def ep_api():
 
         if cmd == "user_register":
             if not DBM.Account.objects(username=args["username"]):
-                DBM.acc_create(args["username"], args["password"])
-                response["msg"] = "successfully created account"
-                ok = True
+                token = args["authtoken"]
+                if MCA.token_by_name(args["username"]) == token:
+                    DBM.acc_create(args["username"], args["password"])
+                    response["msg"] = "Erfolgreich registriert"
+                    ok = True
+                else:
+                    response["msg"] = "Falscher Token"
             else:
-                response["msg"] = "username alerady taken"
+                response["msg"] = "Dieser Account wurde schon registriert"
+        
+        if cmd == "user_preregister":
+            if requests.get("https://api.mojang.com/users/profiles/minecraft/"+str(args["username"])).status_code == 200:
+                if not DBM.Account.objects(username=args["username"]):
+                    MCA.create_token_for(args["username"])
+                    ok = True
+                else:
+                    response["msg"] = "Dieser Account wurde schon registriert"
+            else:
+                response["msg"] = "Es gibt keinen MinecraftAccount mit diesem Namen"
 
         if cmd == "errorcatch":
             message = args["error"]

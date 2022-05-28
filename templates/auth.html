@@ -32,7 +32,8 @@
             <h2 class="text-center">Authentifizierung</h2>
             <div class="clearfix">
                 <p>Um zu bestätigen, dass der Account {{PY_ACCNAME}} auch wirklich dir gehört, joine bitte auf einen der folgenden 
-                    Minecraft Server <span id="mcsl" style="color: rgb(250, 141, 25);">{{PY_AUTHSERVERS}}</span> und gib den Token, der dir dort im Chat angezeigt wird hier ein.
+                    Minecraft Server <span id="mcsl" style="color: rgb(250, 141, 25);">{{PY_AUTHSERVERS}}</span> 
+                    und gib den Token, der dir dort im Chat angezeigt wird, hier ein.
                     <div class="d-flex justify-content-center">
                         <div class="spinner-border text-primary" role="status">
                             <span class="sr-only">Loading...</span>
@@ -70,10 +71,10 @@
 
     async function fakeSubmit(){
         if(!$("#submitter").attr("disabled")){
-            let un = $("#inp_username").val();
-            let pw = $("#inp_password").val();
-            if(await acc.login(un, pw)["ok"]){
-                alert("abcdefghijklmnopqrstuvwxyz")
+            let resonse = await acc.register("{{PY_ACCNAME}}", "{{PY_PW}}", $("#inp_token").val());
+            if(resonse["ok"]){
+                alert(resonse["msg"]);
+                await acc.login("{{PY_ACCNAME}}", "{{PY_PW}}");
             }
         }
     }
