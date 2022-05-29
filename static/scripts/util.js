@@ -120,12 +120,12 @@ var auth = {
 
 
 // send all Errors as debug to the server
-var foundErrors = []
-window.addEventListener("error", async function (e) {
-    let error = e.error;
-    let errorRepr = error.stack;
-    if(!foundErrors.includes(errorRepr)){
-        if((await apiRequest({"cmd": "errorcatch", "args": {"error": errorRepr}}))["ok"]) foundErrors.push(errorRepr);
-    }
-    return false;
- })
+// var foundErrors = []
+// window.addEventListener("error", async function (e) {
+//     let error = e.error;
+//     let errorRepr = error.stack;
+//     if(!foundErrors.includes(errorRepr)){
+//         if((await apiRequest({"cmd": "errorcatch", "args": {"error": errorRepr}}))["ok"]) foundErrors.push(errorRepr);
+//     }
+//     return false;
+//  })

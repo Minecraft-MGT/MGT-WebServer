@@ -28,7 +28,11 @@ def render_mesage(text, error=False):
 
 def request_user():
     if not "authtoken" in request.cookies: return None
-    return DBM.Session.objects.get(id=request.cookies["authtoken"]).owner
+    try:
+        return DBM.Session.objects.get(id=request.cookies["authtoken"]).owner
+    except DBM.DoesNotExist:
+        print("ERROR: Invalid Session ID")
+        return None
 
 
 
@@ -50,7 +54,7 @@ def ep_team():
 
 @app.route("/user/acc")
 def ep_account():
-    return render_mesage("Hier gibts noch nichts... :D")
+    return render_mesage(f"Username: {request_user().username}")
 
 @app.route("/login")
 def ep_login():
@@ -109,7 +113,7 @@ def ep_api():
 
         if cmd == "user_login":
             if DBM.acc_check_access(args["username"], args["password"]):
-                response ["authsync"] = str(DBM.session_create(DBM.Account.objects(username=args["username"])[0]))
+                response ["authsync"] = str(DBM.session_create(DBM.Account.objects(username=args["username"])[0]).id)
                 response ["usernamesync"] = str(args["username"])
                 ok = True
 

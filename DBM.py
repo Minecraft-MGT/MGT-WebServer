@@ -30,7 +30,7 @@ class Session(Document):
     owner = ReferenceField(Account)
 
 def session_create(owner:Account):
-    if Session.objects(owner=owner): return Session.objects(owner=owner)[0].id
+    if Session.objects(owner=owner): return Session.objects(owner=owner)[0]
     return Session(owner=owner).save()
 
 def session_read(id:str):
