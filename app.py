@@ -121,6 +121,7 @@ def ep_api():
             if not DBM.Account.objects(username=args["username"]):
                 token = args["authtoken"]
                 if MCA.token_by_name(args["username"]) == token:
+                    MCA.remove_token_for(args["username"])
                     DBM.acc_create(args["username"], args["password"])
                     response["msg"] = "Erfolgreich registriert"
                     ok = True

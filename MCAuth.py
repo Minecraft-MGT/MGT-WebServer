@@ -14,6 +14,9 @@ def token_by_name(name):
 def create_token_for(name):
     tokens[name] = random_string(5)
 
+def remove_token_for(name):
+    del tokens[name]
+
 
 def provider_register(address):
     providers.append(address)
@@ -38,3 +41,4 @@ def get_authserver_string():
     return authserver_string
 
 build_authserver_string()
+
