@@ -78,6 +78,20 @@ var acc = {
             alert("logout failed...")
         }
         navbarUpdate();        
+    },
+    "delete": async function (){
+        let payload = {
+            "cmd": "accdelete",
+            "args": {}
+        }
+        let response = await apiRequest(payload);
+        if(response["ok"]){
+            auth.resetSession();
+            document.location.reload();
+        }else{
+            alert("account deletion failed...");
+        }
+        navbarUpdate();        
     }
 }
 

@@ -50,11 +50,11 @@ def ep_index():
 
 @app.route("/user/team")
 def ep_team():
-    return render_mesage("Hier gibts noch nichts!")
+    return render_template("viewTeam.html")
 
 @app.route("/user/acc")
 def ep_account():
-    return render_mesage(f"Username: {request_user().username}")
+    return render_template("viewAccount.html", ACC=request_user())
 
 @app.route("/login")
 def ep_login():
@@ -139,6 +139,12 @@ def ep_api():
                     response["msg"] = "Dieser Account wurde schon registriert"
             else:
                 response["msg"] = "Es gibt keinen MinecraftAccount mit diesem Namen"
+
+        if cmd == "accdelete":
+            if request_user() is not None:
+                request_user().delete()
+                DBM.session_terminate(request.cookies["authtoken"])
+                ok = True
 
         if cmd == "errorcatch":
             message = args["error"]
