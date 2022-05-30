@@ -1,1 +1,1 @@
-docker-compose -p "Planner" up
+docker-compose -p "MGT" up

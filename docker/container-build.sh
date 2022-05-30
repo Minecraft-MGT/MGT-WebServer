@@ -9,4 +9,4 @@ rebuild_image () {
 
 #To rebuild containers here
 #args: containerTag, buildpath
-rebuild_image "planner-server:latest" "../"
+rebuild_image "mgt-webserver:latest" "../"

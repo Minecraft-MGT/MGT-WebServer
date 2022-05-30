@@ -2,9 +2,7 @@ version: "3.8"
 
 services:
   server:
-    container_name: "Planner_Webserver"
-    image: "planner-server:latest"
+    container_name: "MGT_Webserver"
+    image: "mgt-webserver:latest"
     ports:
-      - "24445:80"
-    environment:
-      - "server_debug=off"
+      - "24449:80"
