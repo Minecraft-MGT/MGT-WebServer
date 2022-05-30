@@ -7,6 +7,7 @@ from mongoengine.queryset.visitor import Q
 from threading import Thread
 import DBM
 import MCAuth as MCA
+import McSkinDownloader as MCSD
 
 # Load settings
 SETTINGS = {}
@@ -38,8 +39,13 @@ def request_user():
 
 app = Flask(__name__)
 
-@app.route("/auth", methods=["POST"])
+@app.route("/test")
 def ep_test():
+    MCSD.download(request.args["username"], "./static/skins/")
+    return render_template("test.html")
+
+@app.route("/auth", methods=["POST"])
+def ep_auth():
     username = request.form["username"]
     password = request.form["password"]
     return render_template("auth.html", PY_AUTHSERVERS=MCA.get_authserver_string(), PY_ACCNAME=username, PY_PW=password)
@@ -123,6 +129,7 @@ def ep_api():
                 if MCA.token_by_name(args["username"]) == token:
                     MCA.remove_token_for(args["username"])
                     DBM.acc_create(args["username"], args["password"])
+                    MCSD.download(args["username"], "./static/skins/")
                     response["msg"] = "Erfolgreich registriert"
                     ok = True
                 else:
