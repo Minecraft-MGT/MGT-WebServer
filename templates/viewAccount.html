@@ -1,14 +1,46 @@
 {% extends "_baseLayout.html" %}
 {% block content %}
 
+<style>
+    #skin_canvas{
+        /*border-style: dotted;*/
+    }
+</style>
+
 <div class="m-4">
 
 
-<h1>Accounteinstellungen</h1>
+<h1>Accounteinstellungen - {{ACC.username}}</h1>
 
-<p>Username: {{ACC.username}}</p>
+<div>
+    <canvas id="skin_canvas"></canvas>
+    <script>
+        let skinViewer = new skinview3d.SkinViewer({
+            canvas: document.getElementById("skin_canvas"),
+            width: 300,
+            height: 400,
+            skin: "/static/skins/{{ACC.username}}.png"
+        });
+    
+        //skinViewer.loadSkin("/static/skins/{{ACC.username}}.png");
+        skinViewer.loadCape(null);
+    
+        skinViewer.background = document.body.style.backgroundColor;
+    
+        skinViewer.fov = 40;
+        skinViewer.zoom = 0.9;
+    
+        let control = skinview3d.createOrbitControls(skinViewer);
+        control.enableRotate = true;
+        control.enableZoom = false;
+        control.enablePan = false;
+    
+        let idleAnimation = skinViewer.animations.add(skinview3d.IdleAnimation);
+        idleAnimation.speed = 1;
+        idleAnimation.paused = false;
 
-
+    </script>
+</div>
 
 <div>
     <button class="btn btn-warning" onclick="acc.terminateSession();">Ausloggen</button>
