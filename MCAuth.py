@@ -12,7 +12,9 @@ def token_by_name(name):
     return None
 
 def create_token_for(name):
-    tokens[name] = random_string(5)
+    token = random_string(5)
+    print(f"{name}'s token is {token}")
+    tokens[name] = token
 
 def remove_token_for(name):
     del tokens[name]
