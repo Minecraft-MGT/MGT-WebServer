@@ -185,6 +185,16 @@ def ep_api():
     return jsonify(response)
 
 
+#make sure all users skins are downloaded
+print("Downloading all users skins...")
+for ca in DBM.Account.objects:
+    try:
+        if not os.path.exists("./static/skins/"+ca.username+".png"):
+            print("Dowloading "+ca.username+"'s skin...")
+            MCSD.download(ca.username, "./static/skins/")
+    except json.decoder.JSONDecodeError:
+        print("Could not download "+ca.username+"'s skin...")
+
 #start flask debug server
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=31313, debug=True, threaded=True)
