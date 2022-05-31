@@ -153,16 +153,6 @@ def ep_api():
                 DBM.session_terminate(request.cookies["authtoken"])
                 ok = True
 
-        if cmd == "errorcatch":
-            message = args["error"]
-            print(f"""
-            
-            ---Clientside Error Occured---
-            ErrorMessage: {message}
-
-            """)
-            ok = False
-
         if cmd == "ping":
             response["msg"] = "pong"
             response["mirror"] = args["mirror"]
@@ -194,6 +184,16 @@ def ep_api():
     print(f"API-FETCH[{request_user().username if request_user() != None else ''}] {rqd} --> {response}")
     return jsonify(response)
 
+
+#make sure all users skins are downloaded
+print("Downloading all users skins...")
+for ca in DBM.Account.objects:
+    try:
+        if not os.path.exists("./static/skins/"+ca.username+".png"):
+            print("Dowloading "+ca.username+"'s skin...")
+            MCSD.download(ca.username, "./static/skins/")
+    except json.decoder.JSONDecodeError:
+        print("Could not download "+ca.username+"'s skin...")
 
 #start flask debug server
 if __name__ == "__main__":
