@@ -15,7 +15,7 @@ function scanvas_load(elem){
         skin: "/static/skins/"+properties.name+".png"
     });
     skinViewer.loadCape(null);
-    skinViewer.background = document.body.style.backgroundColor;
+    //skinViewer.background = document.body.style.backgroundColor;
     
     skinViewer.fov = properties.fov == null ? 40 : properties.fov;
     skinViewer.zoom = properties.zoom == null ? 0.9 : properties.zoom;
