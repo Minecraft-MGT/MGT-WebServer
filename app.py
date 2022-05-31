@@ -153,16 +153,6 @@ def ep_api():
                 DBM.session_terminate(request.cookies["authtoken"])
                 ok = True
 
-        if cmd == "errorcatch":
-            message = args["error"]
-            print(f"""
-            
-            ---Clientside Error Occured---
-            ErrorMessage: {message}
-
-            """)
-            ok = False
-
         if cmd == "ping":
             response["msg"] = "pong"
             response["mirror"] = args["mirror"]
