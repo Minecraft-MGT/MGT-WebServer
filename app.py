@@ -166,9 +166,14 @@ def ep_api():
             
             if cmd == "team_switch":
                 nteam = DBM.Team.objects(name=args["teamname"]).get()
-                print("NT: "+str(nteam))
                 request_user().change_team(nteam)
                 ok = True
+            
+            if cmd == "team_leave":
+                request_user().change_team(None)
+                ok = True
+
+                
 
         if cmd == "MCAUTHENTICATION":
             if args["authenticationToken"] == SETTINGS["mcauth"]["accesstoken"]:

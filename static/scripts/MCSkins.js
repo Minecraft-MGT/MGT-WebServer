@@ -6,8 +6,8 @@ function scanvas_load(elem){
         "fov": elem.getAttribute("fov"),
         "zoom": elem.getAttribute("zoom"),
         "rotate": elem.hasAttribute("rotate"),
+        "locked": elem.hasAttribute("locked")
     };
-    console.log(elem)
     let skinViewer = new skinview3d.SkinViewer({
         canvas: elem,
         width: properties.width == null ? 300 : properties.width,
@@ -21,7 +21,7 @@ function scanvas_load(elem){
     skinViewer.zoom = properties.zoom == null ? 0.9 : properties.zoom;
     
     let control = skinview3d.createOrbitControls(skinViewer);
-    control.enableRotate = true;
+    control.enableRotate = (properties.locked == false);
     control.enableZoom = false;
     control.enablePan = false;
     

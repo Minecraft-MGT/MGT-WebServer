@@ -11,7 +11,7 @@
     }
     #team-menu{
         width: 100%;
-        
+        margin-right: 50px;
     }
 
     .teamlist-entry{
@@ -34,18 +34,74 @@
         No Content
     </div>
 
-    <!--If player is in no team-->
-    <!-- {%if ACC.team==None%}
-        <button class="btn btn-success" onclick="
-            if(team.create(prompt('Wie soll das Team heißen?'))['ok']) document.location.reload();
-        ">Team Erstellen</button>
-    {% endif %}
-    <button class="btn btn-primary" onclick="
-        if(team.switch(prompt('Name: '))['ok']) document.location.reload();
-    ">Team Wechseln</button> -->
-
     <div style="display: flex;">
         <div id="team-menu">
+            <!--If player is in no team-->
+            {%if ACC.team==None%}
+                <button class="btn btn-success" onclick="
+                    if(await team.create(prompt('Wie soll das Team heißen?'))['ok']) document.location.reload();
+                ">Team Erstellen</button>
+            {% else %}
+            <div id="inteam">
+                <div id="inteam-info">
+                    <h2>Informationen</h2>
+                    <hr>
+                    <div style="display: flex; flex-wrap: wrap;">
+                        <div style="display: inline-block; padding: 10px;" class="mr-5">
+                            <div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Name </span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1" value="{{ACC.team.name}}">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Kürzel </span>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1" value="{{ACC.team.short_name}}">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="
+                            
+                            ">Speichern</button>
+                            <br><br>
+                            <button class="btn btn-warning" onclick="
+                            (async ()=>{if((await team.leave())['ok']) document.location.reload();})();
+                            ">Team verlassen</button>
+                        </div>
+                        <div>
+                            <img src="/static/teams/default/icon.png" width="200px" height="200px" 
+                            style="border-radius: 50%; 
+                            margin-right: 20px;
+                            border-style: solid; 
+                            border-color: rgb(118, 118, 118);
+                            border-width: 5px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="inteam-playersection" style="margin-top: 30px;">
+                    <h2>Miglieder</h2>
+                    <hr>
+                    <div style="display: inline-block; background-color: rgb(229, 229, 229); border-radius: 20px;">
+                        <div style="display: flex; flex-wrap: wrap;">
+                            {% for member in ACC.team.members %}
+                            <div>
+                                <center>
+                                    <h3>{{member.username}}</h3>
+                                </center>
+                                <canvas class="MCSkinDisplay" playername="{{member.username}}"  width="200" height="200"></canvas>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <br><br><br><br><br>
+            <!--Only for debugging => remove later-->
+            <button class="btn btn-primary" onclick="
+            (async ()=>{if((await team.switch(prompt('Name: ')))['ok']) document.location.reload();})();
+            ">Team wechseln</button>
 
         </div>
         <div id="team-list">

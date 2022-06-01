@@ -144,5 +144,13 @@ var team = {
         }
         let response = await apiRequest(payload);
         return response;
+    },
+    "leave": async function (){
+        let payload = {
+            "cmd": "team_leave",
+            "args": {}
+        }
+        let response = await apiRequest(payload);
+        return response;
     }
 }
