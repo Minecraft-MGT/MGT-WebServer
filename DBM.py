@@ -19,28 +19,31 @@ class Account(Document):
     team = ReferenceField("Team")
 
     def change_team(self, new_team):
-        if len(new_team.players) >= TEAM_MAX_PLAYERS: 
+        if len(new_team.members) >= TEAM_MAX_PLAYERS: 
             print("Error: Team already full!")
             return False
 
         old_team = self.team
         self.team = new_team
 
-        old_team.players.remove(self)
-        new_team.players.append(self)
+        new_team.members.append(self)
 
-        if len(old_team.players) <= 0: old_team.delete()
-        
+        if old_team is not None:
+            old_team.members.remove(self)
+            if len(old_team.members) <= 0: 
+                old_team.delete()
+            else:
+                old_team.save()
+        new_team.save()
+        self.save()   
 
 class Team(Document):
     name = StringField(required=True, unique=True, min_length=1, max_length=20)
-    players = ListField(ReferenceField(Account), max_length=3)
+    members = ListField(ReferenceField(Account), max_length=3)
 
 
 def team_create(name):
-    new_team = Team(name=name, players=[]).save()
-    return new_team
-
+    return Team(name=name, members=[]).save()
 
 class Session(Document):
     owner = ReferenceField(Account)

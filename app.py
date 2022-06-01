@@ -147,17 +147,28 @@ def ep_api():
             else:
                 response["msg"] = "Es gibt keinen MinecraftAccount mit diesem Namen"
 
-        if cmd == "accdelete":
-            if request_user() is not None:
-                request_user().delete()
-                DBM.session_terminate(request.cookies["authtoken"])
-                ok = True
-
         if cmd == "ping":
             response["msg"] = "pong"
             response["mirror"] = args["mirror"]
             ok = True
 
+        if request_user() is not None:
+            if cmd == "accdelete":
+                if request_user() is not None:
+                    request_user().delete()
+                    DBM.session_terminate(request.cookies["authtoken"])
+                    ok = True
+
+            if cmd == "team_create":
+                nteam = DBM.team_create(args["teamname"])
+                request_user().change_team(nteam)
+                ok = True
+            
+            if cmd == "team_switch":
+                nteam = DBM.Team.objects(name=args["teamname"]).get()
+                print("NT: "+str(nteam))
+                request_user().change_team(nteam)
+                ok = True
 
         if cmd == "MCAUTHENTICATION":
             if args["authenticationToken"] == SETTINGS["mcauth"]["accesstoken"]:

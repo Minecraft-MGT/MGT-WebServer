@@ -6,8 +6,14 @@
     <hr>
 
     {%if ACC.team==None%}
-        <button class="btn btn-success">Team Erstellen</button>
+        <button class="btn btn-success" onclick="
+            if(team.create(prompt('Wie soll das Team heißen?'))['ok']) document.location.reload();
+        ">Team Erstellen</button>
+        
     {% endif %}
+    <button class="btn btn-primary" onclick="
+        if(team.switch(prompt('Name: '))['ok']) document.location.reload();
+    ">Team Wechseln</button>
 
 </div>
 

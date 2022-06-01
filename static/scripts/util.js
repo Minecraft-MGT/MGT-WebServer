@@ -128,3 +128,21 @@ var auth = {
     }
 }
 
+var team = {
+    "create": async function (teamname){
+        let payload = {
+            "cmd": "team_create",
+            "args": {"teamname": teamname}
+        }
+        let response = await apiRequest(payload);
+        return response;
+    }, 
+    "switch": async function (teamname){
+        let payload = {
+            "cmd": "team_switch",
+            "args": {"teamname": teamname}
+        }
+        let response = await apiRequest(payload);
+        return response;
+    }
+}
