@@ -1,19 +1,72 @@
 {% extends "_baseLayout.html" %}
 {% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300&display=swap');
+
+    #team-list{
+        border-radius: 5px;
+        background-color: rgb(229, 229, 229);
+        width: 300px;
+        padding: 20px;
+    }
+    #team-menu{
+        width: 100%;
+        
+    }
+
+    .teamlist-entry{
+        background-color: white;
+        border-radius: 10px;
+        padding: 5px;
+        margin: 5px;
+    }
+</style>
+<script>
+    function set_alert(text){
+        $("#team_alert").html(text);
+    }
+</script>
 
 <div class="m-4">
     <h1>Team - Einstellungen</h1>
     <hr>
+    <div class="alert alert-danger" role="alert" id="team_alert">
+        No Content
+    </div>
 
-    {%if ACC.team==None%}
+    <!--If player is in no team-->
+    <!-- {%if ACC.team==None%}
         <button class="btn btn-success" onclick="
             if(team.create(prompt('Wie soll das Team heißen?'))['ok']) document.location.reload();
         ">Team Erstellen</button>
-        
     {% endif %}
     <button class="btn btn-primary" onclick="
         if(team.switch(prompt('Name: '))['ok']) document.location.reload();
-    ">Team Wechseln</button>
+    ">Team Wechseln</button> -->
+
+    <div style="display: flex;">
+        <div id="team-menu">
+
+        </div>
+        <div id="team-list">
+            <h4>Teams - Übersicht</h4>
+            <hr>
+            <div id="team-list-content">
+                {% for teamname in ALL_TEAMS %}
+                    <div class="teamlist-entry" style="box-shadow: 0px 10px 10px rgb(195, 195, 195);">
+                        <div style="display: flex; flex-wrap: wrap;">
+                            <div>
+                                <img src="/static/teams/default/icon.png" width="40px" height="40px" style="border-radius: 50%; margin-right: 20px;">
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <p style="margin: 0; font-size: large; cursor: pointer; font-family: 'Azeret Mono', monospace;">{{teamname}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
 </div>
 

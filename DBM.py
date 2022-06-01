@@ -39,6 +39,7 @@ class Account(Document):
 
 class Team(Document):
     name = StringField(required=True, unique=True, min_length=1, max_length=20)
+    short_name = StringField(unique=True, min_length=3, max_length=3)
     members = ListField(ReferenceField(Account), max_length=3)
 
 

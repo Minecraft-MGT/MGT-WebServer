@@ -56,7 +56,7 @@ def ep_index():
 
 @app.route("/user/team")
 def ep_team():
-    return render_template("viewTeam.html", ACC=request_user())
+    return render_template("viewTeam.html", ACC=request_user(), ALL_TEAMS=["SCK", "CGG", "DGS", "PGR", "GAY", "NKG"])
 
 @app.route("/user/acc")
 def ep_account():
