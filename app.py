@@ -36,12 +36,10 @@ def request_user():
         return None
 
 
-
 app = Flask(__name__)
 
 @app.route("/test")
 def ep_test():
-    MCSD.download(request.args["username"], "./static/skins/")
     return render_template("test.html")
 
 @app.route("/auth", methods=["POST"])
