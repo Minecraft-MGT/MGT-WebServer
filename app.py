@@ -180,9 +180,18 @@ def ep_api():
                 request_user().change_team(nteam)
                 ok = True
             
-            if cmd == "team_leave":
-                request_user().change_team(None)
-                ok = True
+            if not request_user().team == None:
+
+                if cmd == "team_leave":
+                    request_user().change_team(None)
+                    ok = True
+                
+                if cmd == "team_update":
+                    to_update =  request_user().team
+                    to_update.name = args["name"]
+                    to_update.short_name = args["short_name"].upper()
+                    to_update.save()
+                    ok = True
 
                 
 
@@ -221,6 +230,18 @@ for ca in DBM.Account.objects:
             MCSD.download(ca.username, "./static/skins/")
     except json.decoder.JSONDecodeError:
         print("Could not download "+ca.username+"'s skin...")
+
+def bebug_registers():
+    def reg(name):
+        DBM.acc_create(name, "a")
+        MCSD.download(name, "./static/skins/")
+    reg("Noname_3")
+    reg("LeeDo")
+    reg("KrawattenFreak")
+    reg("aaa")
+    reg("gay")
+    reg("Technoblade")
+    reg("GommeHD")
 
 #start flask debug server
 if __name__ == "__main__":

@@ -3,9 +3,13 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300&display=swap');
 
+    :root {
+        --custom-color: rgb(242, 242, 242);
+    }
+
     #team-list{
         border-radius: 5px;
-        background-color: rgb(229, 229, 229);
+        background-color:  var(--custom-color); ;
         width: 300px;
         padding: 20px;
     }
@@ -25,6 +29,12 @@
     function set_alert(text){
         $("#team_alert").html(text);
     }
+
+
+    function enablePropSave(){
+        $("#teamPropSave").removeAttr("disabled");
+    }
+    
 </script>
 
 <div class="m-4">
@@ -51,17 +61,22 @@
                             <div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1">Name </span>
-                                    <input type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.name}}">
+                                    <input onchange="enablePropSave();" id="teamProp-n" type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.name}}">
                                 </div>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1">Kürzel </span>
-                                    <input type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.short_name}}">
+                                    <input onchange="enablePropSave();" id="teamProp-sn" type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.short_name}}">
                                 </div>
                             </div>
                             {%if ACCESS==True%}
                             <div>
-                                <button class="btn btn-primary" onclick="
-                                
+                                <button disabled class="btn btn-success" id="teamPropSave" onclick="
+                                (async ()=>{
+                                    if((await team.update($('#teamProp-n').val(), $('#teamProp-sn').val()))['ok']) 
+                                        document.location.reload();
+                                    else
+                                        alert('Daten können nicht gespeichert werden!');
+                                })();
                                 ">Speichern</button>
                                 <br><br>
                                 <button class="btn btn-warning" onclick="
@@ -71,25 +86,21 @@
                             {% endif %}
                         </div>
                         <div>
-                            <img src="/static/teams/default/icon.png" width="200px" height="200px" 
-                            style="border-radius: 50%; 
-                            margin-right: 20px;
-                            border-style: solid; 
-                            border-color: rgb(118, 118, 118);
-                            border-width: 5px;">
+                            <img src="/static/teams/default/icon.png" width="200px" height="200px" style="border-radius: 50%;">
+                            <!--<ion-icon name="cloud-upload-outline" style="font-size: xx-large;"></ion-icon>-->
                         </div>
                     </div>
                 </div>
 
                 <div id="inteam-playersection" style="margin-top: 30px;">
-                    <h2>Miglieder</h2>
+                    <h2>Miglieder ({{TEAM.members|length}}/3)</h2>
                     <hr>
-                    <div style="display: inline-block; background-color: rgb(229, 229, 229); border-radius: 20px;">
+                    <div style="display: inline-block; background-color: var(--custom-color); border-radius: 20px;">
                         <div style="display: flex; flex-wrap: wrap;">
                             {% for member in TEAM.members %}
                             <div>
                                 <center>
-                                    <h3>{{member.username}}</h3>
+                                    <h3 style="margin: 0; margin-top: 10px;">{{member.username}}</h3>
                                 </center>
                                 <canvas class="MCSkinDisplay" playername="{{member.username}}"  width="200" height="200"></canvas>
                             </div>
@@ -113,7 +124,10 @@
             <hr>
             <div id="team-list-content">
                 {% for team in ALL_TEAMS %}
-                    <div class="teamlist-entry" style="box-shadow: 0px 10px 10px rgb(195, 195, 195);">
+                    <div class="teamlist-entry" style="
+                    border-width: 1px; 
+                    border-style: solid;
+                    border-color: rgb(230, 230, 230);"><!--style="box-shadow: 0px 10px 10px rgb(195, 195, 195);"-->
                         <div style="display: flex; flex-wrap: wrap;">
                             <div>
                                 <img src="/static/teams/default/icon.png" width="40px" height="40px" style="border-radius: 50%; margin-right: 20px;">

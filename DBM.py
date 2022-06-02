@@ -43,12 +43,15 @@ class Account(Document):
 
 class Team(Document):
     name = StringField(required=True, unique=True, min_length=1, max_length=20)
-    short_name = StringField(min_length=3, max_length=3)
+    short_name = StringField(required=True, unique=True, max_length=3)
     members = ListField(ReferenceField(Account), max_length=3)
 
 
 def team_create(name):
-    return Team(name=name, members=[]).save()
+    short_name = name[:3].upper()
+    while len(Team.objects(short_name=short_name))>0:
+        short_name = random_string(3).upper()
+    return Team(name=name, short_name=short_name, members=[]).save()
 
 class Session(Document):
     owner = ReferenceField(Account)

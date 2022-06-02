@@ -152,5 +152,14 @@ var team = {
         }
         let response = await apiRequest(payload);
         return response;
+    },
+    "update": async function (name, shortName){
+        let payload = {
+            "cmd": "team_update",
+            "args": {"name": name, "short_name": shortName}
+        }
+        let response = await apiRequest(payload);
+        return response;
     }
+    
 }
