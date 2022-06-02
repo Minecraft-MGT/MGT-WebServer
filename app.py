@@ -52,9 +52,22 @@ def ep_auth():
 def ep_index():
     return render_template("start.html")
 
+@app.route("/teamview")
+def ep_teamview():
+    view_team = DBM.Team.objects(name=request.args["tn"]).get()
+    return render_template("viewTeam.html", 
+    ACC=request_user(), 
+    TEAM=view_team, 
+    ALL_TEAMS=DBM.Team.objects,
+    ACCESS=False)
+
 @app.route("/user/team")
 def ep_team():
-    return render_template("viewTeam.html", ACC=request_user(), ALL_TEAMS=["SCK", "CGG", "DGS", "PGR", "GAY", "NKG"])
+    return render_template("viewTeam.html", 
+    ACC=request_user(), 
+    TEAM=request_user().team, 
+    ALL_TEAMS=DBM.Team.objects,
+    ACCESS=True)
 
 @app.route("/user/acc")
 def ep_account():
