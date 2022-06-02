@@ -24,13 +24,21 @@
         padding: 5px;
         margin: 5px;
     }
+    .teamAttrBox{
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+    .teamAttr{
+        margin: 10px;
+    }
+    .uploadIonicon{
+        font-size: xx-large; color: #737373;
+    }
 </style>
 <script>
     function set_alert(text){
         $("#team_alert").html(text);
     }
-
-
     function enablePropSave(){
         $("#teamPropSave").removeAttr("disabled");
     }
@@ -57,17 +65,16 @@
                     <h2>Informationen</h2>
                     <hr>
                     <div style="display: flex; flex-wrap: wrap;">
-                        <div style="display: inline-block; padding: 10px;" class="mr-5">
-                            <div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1">Name </span>
-                                    <input onchange="enablePropSave();" id="teamProp-n" type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.name}}">
-                                </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1">Kürzel </span>
-                                    <input onchange="enablePropSave();" id="teamProp-sn" type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.short_name}}">
-                                </div>
+                        <div class="teamAttr">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Name </span>
+                                <input onchange="enablePropSave();" id="teamProp-n" type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.name}}">
                             </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">Kürzel </span>
+                                <input onchange="enablePropSave();" id="teamProp-sn" type="text" class="form-control" aria-describedby="basic-addon1" value="{{TEAM.short_name}}">
+                            </div>
+
                             {%if ACCESS==True%}
                             <div>
                                 <button disabled class="btn btn-success" id="teamPropSave" onclick="
@@ -78,16 +85,33 @@
                                         alert('Daten können nicht gespeichert werden!');
                                 })();
                                 ">Speichern</button>
-                                <br><br>
+                                
                                 <button class="btn btn-warning" onclick="
-                                (async ()=>{if((await team.leave())['ok']) document.location.reload();})();
+                                    (async ()=>{if((await team.leave())['ok']) document.location.reload();})();
                                 ">Team verlassen</button>
                             </div>
                             {% endif %}
                         </div>
-                        <div>
-                            <img src="/static/teams/default/icon.png" width="200px" height="200px" style="border-radius: 50%;">
-                            <!--<ion-icon name="cloud-upload-outline" style="font-size: xx-large;"></ion-icon>-->
+                        
+                        <div class="teamAttr teamAttrBox">
+                            <h5 class="input-group-text">Team Icon</h5>
+                            <div style="padding: 5px;">
+                                <img src="/static/teams/default/icon.png" width="200px" height="200px" style="border-radius: 50%;">                                
+                            </div>
+                            <div style="width: 100%; text-align: center;">
+                                <ion-icon class="uploadIonicon" name="cloud-upload-outline"></ion-icon>
+                            </div>
+                        </div>
+
+                        <div class="teamAttr teamAttrBox">
+                            <h5 class="input-group-text">Team Video</h5>
+                            <div style="padding: 5px;">
+                                <video src="https://file-examples.com/storage/fe0811b3916298d6898dcf0/2017/04/file_example_MP4_480_1_5MG.mp4"
+                                width="355px" height="200px" controls="on" autoplay muted></video>
+                            </div>
+                            <div style="width: 100%; text-align: center;">
+                                <ion-icon class="uploadIonicon" name="cloud-upload-outline"></ion-icon>
+                            </div>
                         </div>
                     </div>
                 </div>
