@@ -110,7 +110,7 @@ def catcher():
             print(f"Error parsing json \"{request.data.decode()}\"")
             return "Error processing Json...", 400
     
-    if request.path.startswith("/user/") and not "authtoken" in request.cookies:
+    if request.path.startswith("/user/") and request_user() == None:
         return redirect("/login")
             
 
