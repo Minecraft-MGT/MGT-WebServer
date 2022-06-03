@@ -229,7 +229,7 @@ def ep_api():
                     print("-----")
                     cntnt = Markup(cntnt).unescape()
                     print(cntnt)
-                    with open("./cofig.yml", "w") as file:
+                    with open("./config.yml", "w") as file:
                         file.write(cntnt)
 
                 ok = True
