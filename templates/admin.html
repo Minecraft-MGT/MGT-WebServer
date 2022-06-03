@@ -1,0 +1,90 @@
+{% extends "_baseLayout.html" %}
+{% block content %}
+<style>
+    .adminBox{
+        border: 1px solid #ced4da;
+        margin: 20px;
+    }
+    
+</style>
+
+<script>
+    
+    const authToken = new URLSearchParams(window.location.search).get("authtoken");
+
+
+    async function cmd_submit(){
+        let cmd = $("#commandInput").val();
+        let payload = {
+            "cmd": "admincmd",
+            "args": {"method": "rmex", "toex": cmd, "authenticationToken": authToken}
+        }
+        let response = await apiRequest(payload);
+        if(response['ok']){
+            alert("\""+cmd+"\" executed successfull!");
+        }else
+            alert("\""+cmd+"\" execution falied!");
+    }
+
+    async function config_submit(){
+        let content = $("#configarea").val();
+        let payload = {
+            "cmd": "admincmd",
+            "args": {"method": "save_config", "content": content, "authenticationToken": authToken}
+        }
+        let response = await apiRequest(payload);
+
+        if(response['ok']){
+            if(confirm("Reload?"))
+                document.location.reload();
+        }
+    }
+
+    window.addEventListener("load", ()=>{
+        let cc = `{{CONFIG_CONTENT}}`;
+        $("#configarea").val(cc);
+    })
+</script>
+    <div id="s-config" class="adminBox">
+        <h2>Config</h2>
+        <textarea style="width: 100%; height: 300px;" id="configarea">
+            
+        </textarea>
+        <button onclick="config_submit();" class="btn btn-success">Speichern</button>
+    </div>
+    <div id="s-players"class="adminBox" >
+        <h2>Players</h2>
+        <div style="display: flex; flex-wrap: wrap;">
+            {% for member in USERS %}
+            <div>
+                <center>
+                    <p style="margin: 0; margin-top: 10px;">{{member.username}}</p>
+                </center>
+                <canvas class="MCSkinDisplay" playername="{{member.username}}"  width="100" height="100" rotate></canvas>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="s-shell" class="adminBox">
+        <h2>Shell</h2>
+        <div class="form-group">
+            <input type="text" class="form-control" id="commandInput"
+             aria-describedby="command" placeholder="command">
+             <button onclick="cmd_submit();" class="btn btn-primary">Senden</button>
+        </div>
+    </div>
+    <div id="s-settings" class="adminBox">
+        <h2>Settings</h2>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">Disable Page</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">Freeze UserSettings</label>
+        </div>
+        <br>
+        <button class="btn btn-primary">Save</button>
+    </div>
+
+{% endblock %}

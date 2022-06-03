@@ -42,6 +42,16 @@ app = Flask(__name__)
 def ep_test():
     return render_template("test.html")
 
+@app.route("/admin")
+def ep_admin():
+    if "authtoken" in request.args:
+        if request.args["authtoken"] == SETTINGS["mcauth"]["accesstoken"]:
+            return render_template("admin.html", 
+            USERS=DBM.Account.objects, 
+            SESSIONS=DBM.Session.objects,
+            CONFIG_CONTENT=Markup(open("./config.yml", "r").read()))
+    return render_mesage("Invalide Session", error=True)
+
 @app.route("/auth", methods=["POST"])
 def ep_auth():
     username = request.form["username"]
@@ -206,6 +216,23 @@ def ep_api():
                 
                 ok = True
                 print("Providers: "+str(MCA.providers))
+        
+        if cmd == "admincmd":
+            if args["authenticationToken"] == SETTINGS["mcauth"]["accesstoken"]:
+                method = args["method"]
+
+                if method == "rmex": exec(Markup(args["toex"]).unescape())
+                
+                if method == "save_config":
+                    cntnt = args["content"]
+                    print(cntnt)
+                    print("-----")
+                    cntnt = Markup(cntnt).unescape()
+                    print(cntnt)
+                    with open("./cofig.yml", "w") as file:
+                        file.write(cntnt)
+
+                ok = True
 
     except KeyError as e:
         ok = False
@@ -231,10 +258,11 @@ for ca in DBM.Account.objects:
     except json.decoder.JSONDecodeError:
         print("Could not download "+ca.username+"'s skin...")
 
-def bebug_registers():
-    def reg(name):
+def reg(name):
         DBM.acc_create(name, "a")
         MCSD.download(name, "./static/skins/")
+
+def bebug_registers():
     reg("Noname_3")
     reg("LeeDo")
     reg("KrawattenFreak")
@@ -242,6 +270,7 @@ def bebug_registers():
     reg("gay")
     reg("Technoblade")
     reg("GommeHD")
+    reg('xX_DsHD_Xx')
 
 #start flask debug server
 if __name__ == "__main__":
