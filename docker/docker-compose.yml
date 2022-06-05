@@ -6,3 +6,10 @@ services:
     image: "mgt-webserver:latest"
     ports:
       - "24449:80"
+    volumes:
+      - "mgt_skins:/app/static/skins"
+      - "mgt_teams:/app/static/teams"
+
+volumes:
+  mgt_skins:
+  mgt_teams:
