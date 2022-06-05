@@ -18,8 +18,7 @@ settingsPath = "config.yml"
 
 if os.path.exists(settingsPath):
     with open(settingsPath, "r") as settingsFile: SETTINGS = yaml.safe_load(settingsFile)
-    print("Loaded Settings:")
-    print(SETTINGS)
+    print("Loaded Settings...")
 else:
     print("could not load settings from \""+settingsPath+"\"...")
 
@@ -67,7 +66,7 @@ def ep_index():
 
 @app.route("/teamview")
 def ep_teamview():
-    view_team = DBM.Team.objects(name=request.args["tn"]).get()
+    view_team = DBM.Team.objects(id=request.args["tid"]).get()
     return render_template("viewTeam.html", 
     ACC=request_user(), 
     TEAM=view_team, 
