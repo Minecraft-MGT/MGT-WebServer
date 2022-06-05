@@ -43,6 +43,7 @@
         $("#teamPropSave").removeAttr("disabled");
     }
     
+
 </script>
 
 <div class="m-4">
@@ -96,22 +97,25 @@
                         <div class="teamAttr teamAttrBox">
                             <h5 class="input-group-text">Team Icon</h5>
                             <div style="padding: 5px;">
-                                <img src="/static/teams/default/icon.png" width="200px" height="200px" style="border-radius: 50%;">                                
+                                <img src="{{TEAM.icon_path()}}" width="200px" height="200px" style="border-radius: 50%;">                                
                             </div>
+                            {%if ACCESS==True%}
                             <div style="width: 100%; text-align: center;">
-                                <ion-icon class="uploadIonicon" name="cloud-upload-outline"></ion-icon>
+                                <div class="backgroundFileUploadIcon" action="/fileUpload/icon" accept="image/png, image/jpeg" finishEvent="document.location.reload();"></div>
                             </div>
+                            {% endif %}
                         </div>
 
                         <div class="teamAttr teamAttrBox">
                             <h5 class="input-group-text">Team Video</h5>
                             <div style="padding: 5px;">
-                                <video src="https://file-examples.com/storage/fe0811b3916298d6898dcf0/2017/04/file_example_MP4_480_1_5MG.mp4"
-                                width="355px" height="200px" controls="on" autoplay muted></video>
+                                <video src="{{TEAM.trailer_path()}}" width="355px" height="200px" controls="on" autoplay muted></video>
                             </div>
+                            {%if ACCESS==True%}
                             <div style="width: 100%; text-align: center;">
-                                <ion-icon class="uploadIonicon" name="cloud-upload-outline"></ion-icon>
+                                <div class="backgroundFileUploadIcon" action="/fileUpload/trailer" accept="video/mp4" finishEvent="document.location.reload();"></div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

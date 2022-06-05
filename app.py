@@ -1,6 +1,7 @@
 import os, yaml, time, requests
+from pathlib import Path
 import traceback
-from flask import Flask, render_template, redirect, Markup, request, jsonify, escape, session
+from flask import Flask, render_template, redirect, Markup, request, jsonify, escape
 import json
 from datetime import date, timedelta, datetime
 from mongoengine.queryset.visitor import Q
@@ -8,10 +9,12 @@ from threading import Thread
 import DBM
 import MCAuth as MCA
 import McSkinDownloader as MCSD
+from werkzeug.utils import secure_filename
 
 # Load settings
 SETTINGS = {}
 settingsPath = "config.yml"
+
 
 if os.path.exists(settingsPath):
     with open(settingsPath, "r") as settingsFile: SETTINGS = yaml.safe_load(settingsFile)
@@ -90,6 +93,22 @@ def ep_login():
 @app.route("/register")
 def ep_register():
     return render_template("register.html")
+
+@app.route("/fileUpload/<string:unit>", methods=["POST"])
+def ep_fileUpload(unit):
+    content = request.files['content']
+    file_extension = secure_filename(content.filename.rsplit(".", 1)[1])
+    file_path = "./static/teams/"+str(request_user().team.id)+"/"
+    
+    if unit == "icon":
+        assert(file_extension in DBM.ICON_EXTENSIONS)
+        Path(file_path).mkdir(parents=True, exist_ok=True)
+        content.save(file_path+unit+"."+file_extension)
+    elif unit == "trailer":
+        assert(file_extension in DBM.TRAILER_EXTENSIONS)
+        Path(file_path).mkdir(parents=True, exist_ok=True)
+        content.save(file_path+unit+"."+file_extension)
+    return "Schababer!"
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -267,7 +286,6 @@ def bebug_registers():
     reg("LeeDo")
     reg("KrawattenFreak")
     reg("aaa")
-    reg("gay")
     reg("Technoblade")
     reg("GommeHD")
     reg('xX_DsHD_Xx')

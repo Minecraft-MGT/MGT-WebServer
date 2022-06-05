@@ -1,0 +1,5 @@
+config.yml
+__pycache__/
+static/skins/
+static/teams/*
+!static/teams/default

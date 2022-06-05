@@ -1,7 +1,9 @@
 from mongoengine import *
-import hashlib, random, string, time, math
+import hashlib, random, string, time, math, os
 
 TEAM_MAX_PLAYERS = 3
+ICON_EXTENSIONS = ["png", "jpg", "jpeg"]
+TRAILER_EXTENSIONS = ["mp4"]
 
 def load(url):
     connect(host=url)
@@ -45,6 +47,20 @@ class Team(Document):
     name = StringField(required=True, unique=True, min_length=1, max_length=20)
     short_name = StringField(required=True, unique=True, max_length=3)
     members = ListField(ReferenceField(Account), max_length=3)
+
+    def icon_path(self):
+        base = "/static/teams/"+str(self.id)+"/"
+        for cc in ICON_EXTENSIONS:
+            if os.path.exists("."+base+"icon."+cc):
+                return base+"icon."+cc
+        return "/static/teams/default/icon.png"
+    
+    def trailer_path(self):
+        base = "/static/teams/"+str(self.id)+"/"
+        for cc in TRAILER_EXTENSIONS:
+            if os.path.exists("."+base+"trailer."+cc):
+                return base+"trailer."+cc
+        return "/static/teams/default/trailer.mp4"
 
 
 def team_create(name):
