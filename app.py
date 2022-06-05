@@ -39,6 +39,8 @@ def request_user():
 
 
 app = Flask(__name__)
+# max request size: 20MB
+app.config['MAX_CONTENT_LENGTH'] = 25*1024*1024
 
 @app.route("/test")
 def ep_test():
