@@ -34,6 +34,10 @@
     .uploadIonicon{
         font-size: xx-large; color: #737373;
     }
+
+    .inviteCard:hover{
+        cursor: pointer;
+    }
 </style>
 <script>
     function set_alert(text){
@@ -58,7 +62,7 @@
             <!--If player is in no team-->
             {%if TEAM==None%}
                 <button class="btn btn-success" onclick="
-                (async ()=>{if((await team.create(prompt('Wie soll das Team heißen?'))['ok'])) document.location.reload();})();
+                (async ()=>{if((await team.create(prompt('Wie soll das Team heißen?')))['ok']) document.location.reload();})();
                 ">Team Erstellen</button>
             {% else %}
             <div id="inteam">
@@ -77,10 +81,23 @@
                             </div>
 
                             {%if ACCESS==True%}
-                            <div>
+                            <div class="form-check" data-toggle="tooltip" data-placement="bottom" title="Jeder kann dem Team beitreten">
+                                <input class="form-check-input" type="checkbox" id="teamProp-pu"  onchange="enablePropSave();"
+                                {%if TEAM.opened == True %}
+                                    checked
+                                {% endif %}
+                                >
+                                <label class="form-check-label" for="flexCheckDefault" >Öffentlich</label>
+                            </div>
+
+                            <div class="mt-4">
                                 <button disabled class="btn btn-success" id="teamPropSave" onclick="
                                 (async ()=>{
-                                    if((await team.update($('#teamProp-n').val(), $('#teamProp-sn').val()))['ok']) 
+                                    if((await team.update(
+                                        $('#teamProp-n').val(), 
+                                        $('#teamProp-sn').val(),
+                                        $('#teamProp-pu').is(':checked')
+                                        ))['ok']) 
                                         document.location.reload();
                                     else
                                         alert('Daten können nicht gespeichert werden!');
@@ -91,6 +108,8 @@
                                     (async ()=>{if((await team.leave())['ok']) document.location.reload();})();
                                 ">Team verlassen</button>
                             </div>
+                            {% elif TEAM.can_join(ACC)%}
+                                <button type="button" class="btn btn-primary" onclick="(async ()=>{if((await team.switch('{{TEAM.id}}'))['ok']) document.location.reload();})();">Beitreten</button>
                             {% endif %}
                         </div>
                         
@@ -136,15 +155,102 @@
                         </div>
                     </div>
                 </div>
+                {%if ACCESS==True%}
+                <div id="inteam-playersection" style="margin-top: 30px;">
+                    <h2>Spieler einladen</h2>
+                    <hr>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="invitePlayerName" placeholder="Spielername" onchange="updateList();">
+                        <div class="input-group-append">
+                          <button class="btn btn-success" type="button" onclick="updateList();">Suchen</button>
+                        </div>
+                      </div>
+                    
+                    <div style="display: inline-block; background-color: var(--custom-color); border-radius: 20px; margin-top: 25px;">
+                        <div style="display: flex; flex-wrap: wrap;" id="inviteCards">
+
+                            
+                            <!-- <div class="inviteCard">
+                                <center>
+                                    <h3 style="margin: 0; margin-top: 10px;">HURE</h3>
+                                </center>
+                                <canvas class="MCSkinDisplay" playername="LeeDo"  width="200" height="200"></canvas>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    
+                    
+                    async function invitePlayer(username){
+                        let payload = {
+                            "cmd": "team_invite",
+                            "args": {"invitedUser": username}
+                        }
+                        let response = await apiRequest(payload);
+                        return response;
+                    }
+
+                    async function fetchInviteSuggestions(username){
+                        let payload = {
+                            "cmd": "team_inviteSuggestions",
+                            "args": {"name": username}
+                        }
+                        let response = await apiRequest(payload);
+                        return response;
+                    }
+                    
+                    async function updateList(){
+                        $("#inviteCards").html(`
+                        <div class="spinner-border text-success" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        `);
+
+                        let name = $("#invitePlayerName").val();
+                        let res = await fetchInviteSuggestions(name);
+                        let list = res["result"];
+                        
+
+                        $("#inviteCards").html("");
+                        for(let ce of list){
+                            let name = ce[0]
+                            let team = ce[1]
+
+                            addInviteSuggestion(name, team);
+                        }
+                    }
+
+                    function addInviteSuggestion(name, team){
+                        let teamName = team == undefined ? "Kein Team":team
+                        let template = `
+                        <div class="card m-2" style="width: 15rem;">
+                            <center>
+                                <canvas class="MCSkinDisplay card-img-top" playername="${name}"  width="200" height="200" rotate locked></canvas>
+                            </center>
+                            <div class="card-body">
+                                <h5 class="card-title">${name}</h5>
+                                <p class="card-text">Aktuelles Team: <i>${teamName}</i></p>
+                                <a href="#" class="btn btn-${team==undefined ? "success" : "warning"}"
+                                onclick = "(async ()=>{if((await invitePlayer('${name}'))['ok']) this.parentElement.parentElement.remove();})();"
+                                >Einladen</a>
+                            </div>
+                        </div>`
+                        $("#inviteCards").append(template);
+                        scanvas_load(document.getElementsByClassName("MCSkinDisplay")[document.getElementsByClassName("MCSkinDisplay").length-1]);
+                    }
+
+                </script>
+                {% endif %}
             </div>
             {% endif %}
 
 
             <br><br><br><br><br>
             <!--Only for debugging => remove later-->
-            <button class="btn btn-primary" onclick="
+            <!-- <button class="btn btn-primary" onclick="
             (async ()=>{if((await team.switch(prompt('Name: ')))['ok']) document.location.reload();})();
-            ">Team wechseln</button>
+            ">Team wechseln</button> -->
 
         </div>
         <div id="team-list">

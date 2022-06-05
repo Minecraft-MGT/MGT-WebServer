@@ -1,3 +1,4 @@
+import difflib
 import os, yaml, time, requests
 from pathlib import Path
 import traceback
@@ -206,21 +207,40 @@ def ep_api():
                 ok = True
             
             if cmd == "team_switch":
-                nteam = DBM.Team.objects(name=args["teamname"]).get()
-                request_user().change_team(nteam)
-                ok = True
+                nteam = DBM.Team.objects(id=args["teamid"]).get()
+                if nteam.can_join(request_user()):
+                    request_user().change_team(nteam)
+                    ok = True
             
             if not request_user().team == None:
-
+                cteam = request_user().team
                 if cmd == "team_leave":
                     request_user().change_team(None)
                     ok = True
                 
                 if cmd == "team_update":
-                    to_update =  request_user().team
-                    to_update.name = args["name"]
-                    to_update.short_name = args["short_name"].upper()
-                    to_update.save()
+                    cteam.name = args["name"]
+                    cteam.short_name = args["short_name"].upper()
+                    cteam.opened = args["opened"] == "True"
+                    cteam.save()
+                    ok = True
+                
+                if cmd == "team_invite":
+                    invited = DBM.Account.objects(username=args["invitedUser"]).get()
+                    if not invited in cteam.invites:
+                        cteam.invites.append(invited)
+                    cteam.save()
+                    ok = True
+                
+                if cmd == "team_inviteSuggestions":
+                    search_name = args["name"]
+                    namelist = list(DBM.Account.objects.scalar("username"))
+                    search_results = difflib.get_close_matches(search_name, namelist, n=5, cutoff=0.2)
+                    reslist = []
+                    for cname in search_results:
+                        cacc = DBM.Account.objects(username=cname).get()
+                        reslist.append([cname, cacc.team.name if cacc.team is not None else None])
+                    response["result"] = reslist
                     ok = True
 
                 

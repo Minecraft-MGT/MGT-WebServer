@@ -137,10 +137,10 @@ var team = {
         let response = await apiRequest(payload);
         return response;
     }, 
-    "switch": async function (teamname){
+    "switch": async function (teamid){
         let payload = {
             "cmd": "team_switch",
-            "args": {"teamname": teamname}
+            "args": {"teamid": teamid}
         }
         let response = await apiRequest(payload);
         return response;
@@ -153,10 +153,10 @@ var team = {
         let response = await apiRequest(payload);
         return response;
     },
-    "update": async function (name, shortName){
+    "update": async function (name, shortName, opened){
         let payload = {
             "cmd": "team_update",
-            "args": {"name": name, "short_name": shortName}
+            "args": {"name": name, "short_name": shortName, "opened": opened}
         }
         let response = await apiRequest(payload);
         return response;

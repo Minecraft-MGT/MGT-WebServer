@@ -47,6 +47,8 @@ class Team(Document):
     name = StringField(required=True, unique=True, min_length=1, max_length=20)
     short_name = StringField(required=True, unique=True, max_length=3)
     members = ListField(ReferenceField(Account), max_length=3)
+    invites = ListField(ReferenceField(Account), default=[])
+    opened = BooleanField(default=False)
 
     def icon_path(self):
         base = "/static/teams/"+str(self.id)+"/"
@@ -61,6 +63,12 @@ class Team(Document):
             if os.path.exists("."+base+"trailer."+cc):
                 return base+"trailer."+cc
         return "/static/teams/default/trailer.mp4"
+
+    def can_join(self, acc):
+        if len(self.members) >= TEAM_MAX_PLAYERS: return False
+        if self.opened: return True
+        if acc in self.members: return False
+        return acc in self.invites
 
 
 def team_create(name):
