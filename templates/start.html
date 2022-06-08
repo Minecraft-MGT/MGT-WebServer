@@ -1,6 +1,202 @@
 {% extends "_baseLayout.html" %}
 {% block content %}
 
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Secular+One&display=swap');
+
+    body {
+      background-image: url("/static/resources/Wallpaper01.png");
+      background-repeat: repeat-y;
+      background-size: cover;
+      background-attachment: fixed;
+      
+
+    }
+
+    hr {
+      border-color: rgb(161, 161, 161);
+    }
+
+
+    .wrapper {
+        margin: 10px;
+        padding: 10px;
+        
+    }
+
+    .jumbotron {
+      background-color: rgba(35, 35, 35, 0.88);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .card {
+        margin-right: 20px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+        background-color: rgba(35, 35, 35, 0.88);
+        color:white
+    }
+
+    .progress {
+      margin-bottom: 16px;
+    }
+
+    .d-flex {
+      flex-wrap: wrap;
+    }
+    
+    .second-page {
+      width: 100%;
+      height: 2000px;
+      background-color: white;
+    }
+
+    .logo-mainpage {
+      width: 300px;
+    }
+
+    .third-page {
+      width: 100px;
+    }
+
+    .display-4 {
+      font-family: 'Kdam Thmor Pro', sans-serif;
+    }
+
+    .wrapper2 {
+      position: relative;
+      top: 50px;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .news, .explaining {
+      width: 50%;
+      padding: 20px;
+    }
+
+  @media only screen and (max-width: 1020px) {
+    .jumbotron {
+      justify-content: center;
+    }
+
+    .siteB {
+      margin-top: 30px;
+    }
+
+    
+  
+  }
+
+
+  @media only screen and (max-width: 700px) {
+    .wrapper2 {
+      display: block;
+    }
+    .news, .explaining {
+      width: 100%;
+    }
+
+    .d-flex {
+      justify-content: center;
+    }
+    .lead {
+      text-align: center;
+    }
+
+    h3 {
+      text-align: center;
+    }
+  }
+
+    
+</style>
+
+    <div class="wrapper">
+
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Minecraft MGT</strong> Befindet sich zurzeit noch in der Entwicklungsphase. Die Website beinhaltet sich noch in der Beta-Phase und wird noch vervollständigt.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+    
+
+        
+
+
+
+        
+    
+        <div class="jumbotron">
+            <div class="siteA">
+              <h1 class="display-4">Hallo Spieler!</h1>
+              <p class="lead">Auf dieser Seite erhälst du alle Informationen zu <b>Minecraft MGT - Live</b>.</p>
+              <hr class="my-4">
+              <p>Wenn du dich für Minecraft MGT anmelden möchtest, kannst du das hier direkt tun!</p>
+              <p class="lead">
+                <a class="btn btn-primary btn-lg" href="#" role="button">Anmelden</a>
+              </p>
+            </div>
+            <div class="siteB">
+              <img class="logo-mainpage" src="/static/resources/icon.png" alt="Logo">
+            </div>
+          </div>
+
+
+    </div>
+
+    <div class="second-page">
+
+      <div class="wrapper2">
+        <div class="news">
+          <h3>Neuigkeiten</h3>
+          <hr>
+
+          <div class="d-flex flex-row">
+            
+
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Sponsoren gesucht</h5>
+                <h6 class="card-subtitle mb-2 text-muted">05.06.2022 23:27</h6>
+                <p class="card-text">Falls Menschen oder Unternehmen vorbeischauen, wir würden uns über einen Sponsor regelrecht freuen, der das Projekt finanziert!</p>
+              </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Der Start!</h5>
+                <h6 class="card-subtitle mb-2 text-muted">05.06.2022 23:26</h6>
+                <p class="card-text">Willkommen auf der offiziellen Seite von Minecraft MGT! Der Start der Card-News wurde somit eingeleitet.</p>
+              </div>
+            </div>
+
+        
+          </div>
+
+
+        </div>
+
+        <div class="explaining">
+          <h3>Was ist <i>Minecraft MGT?</i></h3>
+          <hr>
+        </div>
+
+        
+      </div>
+
+    </div>
+
+  <div class="third-page">
+
+  </div>
+
 
 
 {% endblock %}
