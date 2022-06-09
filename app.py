@@ -158,6 +158,10 @@ def ep_api():
         if cmd == "session_terminate":
             DBM.session_terminate(request.cookies["authtoken"])
             ok = True
+        
+        if cmd == "user_pwchange":
+            request_user().change_pw(args["newpw"])
+            ok = True
 
         if cmd == "user_login":
             if DBM.acc_check_access(args["username"], args["password"]):

@@ -35,7 +35,15 @@
             </button>
             <div class="collapse" id="collapseExample">
                 <div class="mt-2">
-                    <button  class="btn btn-danger" onclick="">Passwort ändern</button>
+                    <button  class="btn btn-danger" onclick="(async ()=>{
+                        let newPW = prompt('Neues Passwort: ');
+                        if(newPW!=undefined)
+                            if((await acc.changePw(newPW))['ok']){
+                                alert('Passwort erfolgreich geändert.');
+                            }else{
+                                alert('Passwort konnte nicht geändert werden.');
+                            }
+                    })();">Passwort ändern</button>
                     <button  class="btn btn-danger" onclick="if(confirm('Bist du sicher, dass du deinen Account löschen möchtest?'))acc.delete();
                     ">Account löschen</button>
                 </div>

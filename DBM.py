@@ -42,6 +42,10 @@ class Account(Document):
             else:
                 old_team.save()
         self.save()
+    
+    def change_pw(self, new_pw):
+        self.password = hash_string(new_pw)
+        self.save()
 
 class Team(Document):
     name = StringField(required=True, unique=True, min_length=1, max_length=20)

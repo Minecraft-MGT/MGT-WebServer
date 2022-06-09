@@ -31,6 +31,15 @@ async function navbarUpdate(){
 //account/session controll
 
 var acc = {
+    "changePw": async (newPw)=>{
+        let payload = {
+            "cmd": "user_pwchange",
+            "args": {"newpw": newPw}
+        }
+        let response = await apiRequest(payload);
+        return response;
+        
+    },
     "preregister": async function(username, password){
         let payload = {
             "cmd": "user_preregister",
