@@ -104,10 +104,17 @@ def ep_fileUpload(unit):
     
     if unit == "icon":
         assert(file_extension in DBM.ICON_EXTENSIONS)
+        iloc = request_user().team.icon_path()
+        if not iloc.startswith("/static/teams/default/"):
+            os.remove("."+iloc)
         Path(file_path).mkdir(parents=True, exist_ok=True)
         content.save(file_path+unit+"."+file_extension)
+
     elif unit == "trailer":
         assert(file_extension in DBM.TRAILER_EXTENSIONS)
+        tloc = request_user().team.trailer_path()
+        if not tloc.startswith("/static/teams/default/"):
+            os.remove("."+tloc)
         Path(file_path).mkdir(parents=True, exist_ok=True)
         content.save(file_path+unit+"."+file_extension)
     return "Schababer!"
