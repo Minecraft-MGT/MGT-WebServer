@@ -18,18 +18,93 @@
     <script src="/static/scripts/MCSkins.js"></script>
     <script src="/static/scripts/backgroundFileUpload.js"></script>
 </head>
+
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Secular+One&display=swap');
+
+  a, a:hover {
+    text-decoration: none;
+    color: white
+  }
+
+
+  .topnav {
+      background-color: rgb(34, 34, 34);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      font-family: 'Kdam Thmor Pro', sans-serif;
+      height: 60px;
+      justify-content: space-between;
+  }
+
+  .leftside-navbar {
+    display: flex;
+    align-items: center;
+  }
+
+  .leftside-navbar div, .rightside-navbar div {
+    padding: 0px 10px ;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    border-radius: 5px;
+
+  }
+
+  .nav-myTeam:hover, .nav-myAccount:hover, .nav-login:hover {
+    background-color: rgb(65, 65, 65);
+  }
+
+  .rightside-navbar {
+    margin-right: 30px;
+  }
+  
+
+  /* 
+  
+  */
+
+  .img-logo img {
+    width: 50px;
+    padding: 10px;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .rightside-navbar, .nav-myTeam {
+      display: none;
+    }
+
+  }
+
+</style>
+
 <body>
 
     <!--Navigation bar-->
     <div id="section-navbar">
       <div class="topnav">
-        <a class="active" href="/">MiniGameTurnament</a>
-        <a href="/user/team" class="requirelogin">Mein Team</a>
-        <a href="/user/acc" class="requirelogin">Mein Account</a>
+        <div class="leftside-navbar">
+          <div class="img-logo">
+            <img src="/static/resources/icon.png" alt="Logo">
+          </div>
 
-        <div class="topnav-right">
-          <a href="/login" id="navbar-acctile">Login</a>
+          <div class="nav-myTeam">
+            <a href="/user/team" class="requirelogin">Mein Team</a>
+          </div>
+          <div class="nav-myAccount">
+            <a href="/user/acc" class="requirelogin">Mein Account</a>
+          </div>
+
         </div>
+
+        <div class="rightside-navbar">
+          <div class="nav-login">
+            <a href="/login" id="navbar-acctile">Login</a>
+          </div>
+        </div>
+          
       </div>
     </div>
 
