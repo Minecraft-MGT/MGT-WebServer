@@ -250,7 +250,8 @@ def ep_api():
                     reslist = []
                     for cname in search_results:
                         cacc = DBM.Account.objects(username=cname).get()
-                        reslist.append([cname, cacc.team.name if cacc.team is not None else None])
+                        if cacc.team == request_user().team: continue
+                        reslist.append([cname, cacc.team.name if cacc.team is not None else None, (cacc in request_user().team.invites)])
                     response["result"] = reslist
                     ok = True
 
@@ -297,7 +298,7 @@ def ep_api():
     response["ok"] = ok
     print(f"API-FETCH[{request_user().username if request_user() != None else ''}] {rqd} --> {response}")
     return jsonify(response)
-
+ 
 
 #make sure all users skins are downloaded
 print("Downloading all users skins...")

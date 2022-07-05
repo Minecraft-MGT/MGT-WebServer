@@ -46,15 +46,29 @@
     function enablePropSave(){
         $("#teamPropSave").removeAttr("disabled");
     }
-    
+
+    window.addEventListener("load", ()=>{
+        {%if TEAM==None%}
+            $("#team_alert").remove();
+        {% else %}
+            //check if the team should do further customizations and display it in an alert
+            if("{{TEAM.icon_path()}}" == "/static/teams/default/icon.png"){
+                set_alert("Dein Team hat noch kein individuelles Icon! Das solltest ihr vielleicht ändern.");
+            }else if("{{TEAM.trailer_path()}}" == "/static/teams/default/trailer.mp4"){
+                set_alert("Dein Team hat noch kein Vorstellungsvideo.");
+            }else{
+                $("#team_alert").remove();
+            }
+        {% endif %}
+    })
 
 </script>
 
 <div class="m-4">
-    <h1>Team - Einstellungen</h1>
+    <h1>Team - Übersicht</h1>
     <hr>
     <div class="alert alert-danger" role="alert" id="team_alert">
-        No Content
+        ...
     </div>
 
     <div style="display: flex;">
@@ -216,12 +230,13 @@
                         for(let ce of list){
                             let name = ce[0]
                             let team = ce[1]
+                            let invited = ce[2]
 
-                            addInviteSuggestion(name, team);
+                            addInviteSuggestion(name, team, invited);
                         }
                     }
 
-                    function addInviteSuggestion(name, team){
+                    function addInviteSuggestion(name, team, invited){
                         let teamName = team == undefined ? "Kein Team":team
                         let template = `
                         <div class="card m-2" style="width: 15rem;">
@@ -230,10 +245,16 @@
                             </center>
                             <div class="card-body">
                                 <h5 class="card-title">${name}</h5>
-                                <p class="card-text">Aktuelles Team: <i>${teamName}</i></p>
-                                <a href="#" class="btn btn-${team==undefined ? "success" : "warning"}"
-                                onclick = "(async ()=>{if((await invitePlayer('${name}'))['ok']) this.parentElement.parentElement.remove();})();"
-                                >Einladen</a>
+                                <p class="card-text">Aktuelles Team: <br> <i>${teamName}</i></p>
+                                <button ${invited ? "disabled" : ""} class="btn btn-${team==undefined ? "success" : "warning"}"
+                                onclick = "(async ()=>{if((await invitePlayer('${name}'))['ok']){
+                                    this.setAttribute('disabled', 'disabled');
+                                    this.innerHTML = 'Bereits eingeladen';
+                                    } 
+                                })();">
+                                    ${invited ? "Bereits eingeladen":"Einladen"}
+                                </button>
+                                
                             </div>
                         </div>`
                         $("#inviteCards").append(template);
