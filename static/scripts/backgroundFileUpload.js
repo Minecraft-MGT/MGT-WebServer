@@ -12,7 +12,7 @@ function bgfileUp_load(elem){
         randomID = "backgroundFileUpload_"+randint(99999)+"_";
 
     let template = `
-    <label for="${randomID}Upload" id="${randomID}">
+    <label for="${randomID}Upload" id="${randomID}" style="cursor:pointer;">
         <ion-icon id="${randomID}Icon" class="uploadIonicon" name="cloud-upload-outline"></ion-icon>
     </label>
     <iframe style="display:none" name="${randomID}UploadFrame" onload="
