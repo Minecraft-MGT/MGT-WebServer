@@ -54,7 +54,8 @@ def ep_admin():
             return render_template("admin.html", 
             USERS=DBM.Account.objects, 
             SESSIONS=DBM.Session.objects,
-            CONFIG_CONTENT=Markup(open("./config.yml", "r").read()))
+            CONFIG_CONTENT=Markup(open("./config.yml", "r").read()),
+            DBM=DBM)
     return render_mesage("Invalide Session", error=True)
 
 @app.route("/auth", methods=["POST"])
@@ -98,6 +99,7 @@ def ep_register():
 
 @app.route("/fileUpload/<string:unit>", methods=["POST"])
 def ep_fileUpload(unit):
+    if DBM.setting_get("ft") == "True": return "nix gibts"
     content = request.files['content']
     file_extension = secure_filename(content.filename.rsplit(".", 1)[1])
     file_path = "./static/teams/"+str(request_user().team.id)+"/"
@@ -123,9 +125,18 @@ def ep_fileUpload(unit):
 def page_not_found(e):
     return render_mesage(f"Zu deiner Anfrage mit dem Pfad \"{request.path}\" konntent wir leider keine Ergebnisse finden!", error=True)
 
+whitelist = ["/admin", "/static/", "/api/"]
+
 @app.before_request
 def catcher():
-    #parse json
+    
+    if DBM.setting_get("dp") == "True":
+        whitelisted = False
+        for ce in whitelist:
+            if request.path.startswith(ce): whitelisted = True
+        if not whitelisted: return render_mesage("Bitte versuche es später erneut!")
+
+    #parse json for api
     if request.path == "/api/":
         try:
             jsonObj = json.loads(request.data)
@@ -191,14 +202,17 @@ def ep_api():
                 response["msg"] = "Dieser Account wurde schon registriert"
         
         if cmd == "user_preregister":
-            if requests.get("https://api.mojang.com/users/profiles/minecraft/"+str(args["username"])).status_code == 200:
-                if not DBM.Account.objects(username=args["username"]):
-                    MCA.create_token_for(args["username"])
-                    ok = True
+            if not DBM.setting_get("pr") == "True":
+                if requests.get("https://api.mojang.com/users/profiles/minecraft/"+str(args["username"])).status_code == 200:
+                    if not DBM.Account.objects(username=args["username"]):
+                        MCA.create_token_for(args["username"])
+                        ok = True
+                    else:
+                        response["msg"] = "Dieser Account wurde schon registriert"
                 else:
-                    response["msg"] = "Dieser Account wurde schon registriert"
+                    response["msg"] = "Es gibt keinen MinecraftAccount mit diesem Namen"
             else:
-                response["msg"] = "Es gibt keinen MinecraftAccount mit diesem Namen"
+                response["msg"] = "Momentan sind leider keine Registrierungen möglich"
 
         if cmd == "ping":
             response["msg"] = "pong"
@@ -208,9 +222,10 @@ def ep_api():
         if request_user() is not None:
             if cmd == "accdelete":
                 if request_user() is not None:
-                    request_user().delete()
-                    DBM.session_terminate(request.cookies["authtoken"])
-                    ok = True
+                    if not DBM.setting_get("pd") == "True":
+                        request_user().delete()
+                        DBM.session_terminate(request.cookies["authtoken"])
+                        ok = True
 
             if cmd == "team_create":
                 nteam = DBM.team_create(args["teamname"])
@@ -283,7 +298,13 @@ def ep_api():
                     print(cntnt)
                     with open("./config.yml", "w") as file:
                         file.write(cntnt)
-
+                
+                if method == "save_settings":
+                    payload = args["payload"]
+                    for key in payload:
+                        val = payload[key]
+                        DBM.setting_set(key, val)
+                    print("settings: "+str(payload))
                 ok = True
 
     except KeyError as e:

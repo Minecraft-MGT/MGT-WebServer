@@ -84,6 +84,19 @@ def team_create(name):
 class Session(Document):
     owner = ReferenceField(Account)
 
+class ServerSetting(Document):
+    key = StringField()
+    val = StringField()
+
+def setting_get(key):
+    if not ServerSetting.objects(key=key): return None
+    return ServerSetting.objects(key=key)[0].val
+
+def setting_set(key, val):
+    toEdit = ServerSetting.objects(key=key)[0] if ServerSetting.objects(key=key) else ServerSetting(key=key, val=val)
+    toEdit.val = val
+    toEdit.save()
+
 def session_create(owner:Account):
     if Session.objects(owner=owner): return Session.objects(owner=owner)[0]
     return Session(owner=owner).save()
