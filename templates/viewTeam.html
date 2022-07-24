@@ -288,8 +288,9 @@
                                 <img src="/static/teams/default/icon.png" width="40px" height="40px" style="border-radius: 50%; margin-right: 20px;">
                             </div>
                             <div style="display: flex; align-items: center;">
-                                <p style="margin: 0; font-size: large; cursor: pointer; font-family: 'Azeret Mono', monospace;"
-                                onclick="document.location = '/teamview?tid={{team.id}}';">{{team.short_name}}</p>
+                                <a href="/teamview?tid={{team.id}}" style="text-decoration: none;">
+                                    <p style="margin: 0; font-size: large; cursor: pointer; font-family: 'Azeret Mono', monospace; color: #212529;">{{team.short_name}}</p>
+                                </a>
                             </div>
                         </div>
                     </div>
