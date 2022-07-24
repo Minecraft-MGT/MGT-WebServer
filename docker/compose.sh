@@ -1,1 +1,1 @@
-docker-compose -p "MGT" up
+docker-compose -p "MGT" up -d
