@@ -17,13 +17,14 @@
     <script src="/static/libraries/skinview3d.js"></script>
     <script src="/static/scripts/MCSkins.js"></script>
     <script src="/static/scripts/backgroundFileUpload.js"></script>
+    <script src="/static/scripts/cachekiller.js"></script>
 </head>
 
 <style>
 
   @import url('https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Secular+One&display=swap');
 
-  a, a:hover {
+  .start_link{
     text-decoration: none;
     color: white;
     margin: 0px;
@@ -120,21 +121,23 @@
       <div class="topnav">
         <div class="leftside-navbar">
           <div class="img-logo">
-            <img onClick="document.location = '/';" src="/static/resources/icon.png" alt="Logo">
+            <a href="/">
+              <img src="/static/resources/icon.png" alt="Logo" style="cursor: pointer;">
+            </a>
           </div>
 
           <div class="nav-myTeam">
-            <a href="/user/team" class="requirelogin">Mein Team</a>
+            <a href="/user/team" class="requirelogin start_link">Mein Team</a>
           </div>
           <div class="nav-myAccount">
-            <a href="/user/acc" class="requirelogin">Mein Account</a>
+            <a href="/user/acc" class="requirelogin start_link">Mein Account</a>
           </div>
 
         </div>
 
         <div class="rightside-navbar">
           <div class="nav-login">
-            <a href="/login" id="navbar-acctile">Login</a>
+            <a href="/login" id="navbar-acctile" class="start_link">Login</a>
           </div>
 
           
