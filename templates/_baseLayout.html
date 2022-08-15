@@ -25,7 +25,9 @@
 
   a, a:hover {
     text-decoration: none;
-    color: white
+    color: white;
+    margin: 0px;
+    padding: 0px;
   }
 
 
@@ -44,7 +46,7 @@
     align-items: center;
   }
 
-  .leftside-navbar div, .rightside-navbar div {
+  .leftside-navbar div {
     padding: 0px 10px ;
     display: flex;
     align-items: center;
@@ -53,12 +55,28 @@
 
   }
 
+  .rightside-navbar div {
+    padding: 0px 10px ;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    border-radius: 5px;
+  }
+
   .nav-myTeam:hover, .nav-myAccount:hover, .nav-login:hover {
     background-color: rgb(65, 65, 65);
   }
 
   .rightside-navbar {
     margin-right: 30px;
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown {
+    display: none !important;
+    height: 60px;
+    
   }
   
 
@@ -69,14 +87,29 @@
   .img-logo img {
     width: 50px;
     padding: 10px;
+    cursor: pointer;
   }
 
   @media only screen and (max-width: 700px) {
-    .rightside-navbar, .nav-myTeam {
-      display: none;
+    .nav-login, .nav-myTeam, .nav-myAccount {
+      display: none !important;
+    }
+
+    .dropdown {
+      display: flex !important;
+      color: white;
+      font-size: 30px;
+      align-items: center;
     }
 
   }
+
+
+
+
+
+
+
 
 </style>
 
@@ -87,7 +120,7 @@
       <div class="topnav">
         <div class="leftside-navbar">
           <div class="img-logo">
-            <img src="/static/resources/icon.png" alt="Logo">
+            <img onClick="document.location = '/';" src="/static/resources/icon.png" alt="Logo">
           </div>
 
           <div class="nav-myTeam">
@@ -103,6 +136,14 @@
           <div class="nav-login">
             <a href="/login" id="navbar-acctile">Login</a>
           </div>
+
+          
+        
+
+          <ion-icon onclick="myFunction()" class="dropbtn" name="menu-outline"></ion-icon>
+
+          
+
         </div>
           
       </div>
@@ -121,4 +162,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
+
 </html>

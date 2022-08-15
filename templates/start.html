@@ -79,6 +79,30 @@
       padding: 20px;
     }
 
+    .button-mainpage {
+      background-color: rgb(0, 128, 255);
+      padding: 10px;
+      border-radius: 10px;
+      border-style: none;
+      color: white;
+      font-size: 20px;
+    }
+
+    .trailer-flex {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .youtubeTeaser2 {
+      display: block;
+    }
+
+    .youtubeTeaser1 {
+      display: none;
+    }
+
   @media only screen and (max-width: 1020px) {
     .jumbotron {
       justify-content: center;
@@ -104,12 +128,25 @@
     .d-flex {
       justify-content: center;
     }
-    .lead {
+    .mainpage-div {
+      width: 100%;
       text-align: center;
     }
 
     h3 {
       text-align: center;
+    }
+
+    .display-4 {
+      text-align: center;
+    }
+
+    .youtubeTeaser2 {
+      display: none;
+    }
+
+    .youtubeTeaser1 {
+      display: block;
     }
   }
 
@@ -138,9 +175,9 @@
               <p class="lead">Auf dieser Seite erhälst du alle Informationen zu <b>Minecraft MGT - Live</b>.</p>
               <hr class="my-4">
               <p>Wenn du dich für Minecraft MGT anmelden möchtest, kannst du das hier direkt tun!</p>
-              <p class="lead">
-                <a class="btn btn-primary btn-lg" href="#" role="button">Anmelden</a>
-              </p>
+              <div class="mainpage-div">
+                <button class="button-mainpage" href="/register" role="button">Registrieren</button>
+              </div>
             </div>
             <div class="siteB">
               <img class="logo-mainpage" src="/static/resources/icon.png" alt="Logo">
@@ -185,6 +222,14 @@
         <div class="explaining">
           <h3>Was ist <i>Minecraft MGT?</i></h3>
           <hr>
+
+          <p>Jetzt ist natürlich die Frage, was ist denn überhaupt <i>Minecraft MGT</i>? Um es einfach zu machen: <i>Minecraft-Game-Tournament</i>. Dreier Teams treten hierbei gegeneinander an und kämpfen um den Sieg. Diese Spiele werden Live auf YouTube übertragen und Live modieriert! Sehe dir jetzt den Teaser an:</p>
+
+          <div class="trailer-flex">
+            <iframe class="youtubeTeaser1" width="360" height="202,5" src="https://www.youtube.com/embed/fIovV5DcyhE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="youtubeTeaser2" width="960" height="504" src="https://www.youtube.com/embed/fIovV5DcyhE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>  
+          
         </div>
 
         
